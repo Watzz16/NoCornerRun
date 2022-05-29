@@ -1,9 +1,12 @@
 package main;
 
 import entity.Player;
+import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -23,6 +26,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
 
     Player player = new Player(this, this.keyHandler);
+    TileManager TM = new TileManager(this);
 
     //player default position
     int playerX = 100;
@@ -94,7 +98,17 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
+
+        BufferedImage purpleWorld;
+        try {
+            purpleWorld = ImageIO.read(getClass().getResourceAsStream("/sprites/Backgrounds/Purple_world.jpg"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        g2.drawImage(purpleWorld, -200, -250, null);
         player.draw(g2);
+        TM.draw(g2);
 
         g2.dispose();
     }
