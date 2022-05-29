@@ -41,11 +41,10 @@ public class Player extends Entity {
     }
 
     public void update() {
-        if(keyHandler.spacePressed) {
+        if(keyHandler.UpKeyPressed) {
             y -= speed;
             playerState = PlayerState.JUMP;
         } else {
-            y += 8;
             playerState = PlayerState.IDLE;
         }
     }
