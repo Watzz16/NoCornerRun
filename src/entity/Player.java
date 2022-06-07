@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import tile.TileManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,10 +15,14 @@ public class Player extends Entity {
 
     BufferedImage imageIdle, imageWalk1, imageWalk2, imageJump;
     PlayerState playerState = PlayerState.IDLE;
+    TileManager tileManager;
 
-    public Player(GamePanel gamePanel, KeyHandler keyHandler) {
+    int lane = 0;
+
+    public Player(GamePanel gamePanel, KeyHandler keyHandler, TileManager tileManager) {
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
+        this.tileManager = tileManager;
 
         this.setDefaultValues();
         loadPlayerImages();
@@ -25,8 +30,9 @@ public class Player extends Entity {
 
     public void setDefaultValues() {
         this.x = 100;
-        this.y = 500;
+        this.y = 300;
         this.speed = 4;
+        this.lane = 0;
     }
 
     public void loadPlayerImages() {
@@ -41,8 +47,17 @@ public class Player extends Entity {
     }
 
     public void update() {
-        if(keyHandler.UpKeyPressed) {
-            y -= speed;
+        if(keyHandler.upKeyPressed) {
+            if(lane < tileManager.getLanes().length-1) lane++;
+            keyHandler.upKeyPressed = false;
+        }
+
+        if(keyHandler.downKeyPressed) {
+            if(lane > 0) lane--;
+            keyHandler.downKeyPressed = false;
+        }
+
+        if(!keyHandler.canPressUpKey || !keyHandler.canPressDownKey) {
             playerState = PlayerState.JUMP;
         } else {
             playerState = PlayerState.IDLE;
@@ -56,7 +71,9 @@ public class Player extends Entity {
             case JUMP -> currentImage = imageJump;
         }
 
-        g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
+        int currentLanePositionY = tileManager.getLanes()[lane].getLaneYPosition();
+
+        g2.drawImage(currentImage, x, currentLanePositionY-gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 
 }

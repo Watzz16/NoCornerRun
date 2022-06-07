@@ -16,8 +16,8 @@ public class GamePanel extends JPanel implements Runnable {
     final int scale = 3; //how large do we want to scale one tile? 3x -> 48x48 pixel
 
     public final int tileSize = originalTileSize * scale; //48x48 pixel
-    final int maxScreenCol = 16; //how many tiles in width? Columns
-    final int maxScreenRow = 12; //how many tiles in height? Rows
+    public final int maxScreenCol = 16; //how many tiles in width? Columns
+    public final int maxScreenRow = 12; //how many tiles in height? Rows
     final int screenWidth = tileSize * maxScreenCol; //calculate the pixel width of the window
     final int screenHeight = tileSize * maxScreenRow; //calculate the pixel height of the window
 
@@ -26,13 +26,8 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
 
-    Player player = new Player(this, this.keyHandler);
-    TileManager TM = new TileManager(this);
-
-    //player default position
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4;
+    TileManager tileManager = new TileManager(this);
+    Player player = new Player(this, this.keyHandler, tileManager);
 
     //this is the constructor. It's a method that is called once a new object of that class is created. It constructs the object
     public GamePanel() {
@@ -92,6 +87,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         player.update();
+        tileManager.update();
     }
 
     @Override
@@ -109,7 +105,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         g2.drawImage(purpleWorld, -200, -250, null);
         player.draw(g2);
-        TM.draw(g2);
+        tileManager.draw(g2);
 
         g2.dispose();
     }

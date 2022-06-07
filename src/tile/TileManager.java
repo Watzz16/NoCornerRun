@@ -8,25 +8,31 @@ import java.io.IOException;
 
 
 public class TileManager {
-    GamePanel GP;
-    Tile[] Tiles;
+    GamePanel gamePanel;
+    Lane[] lanes;
 
-    public TileManager(GamePanel GP){
-        this.GP = GP;
-        Tiles = new Tile[10];
-        getTileImage();
+    public TileManager(GamePanel gamePanel){
+        this.gamePanel = gamePanel;
+        buildLanes();
     }
-    public void getTileImage (){
-        Tiles[0] = new Tile();
-        try {
-            Tiles[0].image = ImageIO.read(getClass().getResourceAsStream("/sprites/Ground/Grass/grass.png"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
 
-        }
+    private void buildLanes() {
+        lanes = new Lane[3];
+        lanes[0] = new Lane(530, gamePanel);
+        lanes[1] = new Lane(330, gamePanel);
+        lanes[2] = new Lane(130, gamePanel);
     }
+
     public void draw(Graphics2D g2){
-        g2.drawImage(Tiles[0].image,0,500,null);
+        for(Lane lane : lanes) lane.draw(g2);
+    }
+
+    public void update() {
+        for(Lane lane : lanes) lane.update();
+    }
+
+    public Lane[] getLanes() {
+        return lanes;
     }
 
 }
