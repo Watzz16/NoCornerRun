@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import entity.enemies.EnemyManager;
 import tile.TileManager;
 
 import javax.imageio.ImageIO;
@@ -28,6 +29,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     TileManager tileManager = new TileManager(this);
     Player player = new Player(this, this.keyHandler, tileManager);
+
+    EnemyManager enemyManager = new EnemyManager(this, tileManager);
 
     //this is the constructor. It's a method that is called once a new object of that class is created. It constructs the object
     public GamePanel() {
@@ -88,6 +91,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         player.update();
         tileManager.update();
+        enemyManager.update();
     }
 
     @Override
@@ -106,6 +110,7 @@ public class GamePanel extends JPanel implements Runnable {
         g2.drawImage(purpleWorld, -200, -250, null);
         player.draw(g2);
         tileManager.draw(g2);
+        enemyManager.draw(g2);
 
         g2.dispose();
     }

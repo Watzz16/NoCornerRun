@@ -55,4 +55,8 @@ public class Lane {
         return this.yPosition;
     }
 
+    public int getLaneSpeed() {
+        return this.laneSpeed;
+    }
+
 }

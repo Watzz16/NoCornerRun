@@ -19,6 +19,7 @@ public class Player extends Entity {
 
     private int spriteAnimCounter = 0;
     private int walkAnimSprite = 1;
+    private int walkAnimFrameDuration = 7;
 
     int lane = 0;
 
@@ -91,7 +92,7 @@ public class Player extends Entity {
     }
 
     private void walkAnimation() {
-        if(spriteAnimCounter > 8) {
+        if(spriteAnimCounter > walkAnimFrameDuration) {
             if(walkAnimSprite == 1) {
                 walkAnimSprite = 2;
             } else {
