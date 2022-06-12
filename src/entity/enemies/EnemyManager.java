@@ -17,7 +17,7 @@ public class EnemyManager {
     private TileManager tileManager;
     private int concurrentEnemyCount = 3;
     private int minSpeed = 0;
-    private int maxSpeed = 5;
+    private int maxSpeed = 0;
 
     public EnemyManager(GamePanel gamePanel, TileManager tileManager) {
         this.gamePanel = gamePanel;

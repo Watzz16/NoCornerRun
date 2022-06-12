@@ -1,5 +1,6 @@
 package entity.enemies;
 
+import entity.HitboxType;
 import main.GamePanel;
 import tile.TileManager;
 
@@ -17,6 +18,8 @@ public class SawEnemy extends Enemy {
         this.x = startXposition;
         this.speed = speed;
         this.damage = 5;
+        this.hitboxType = HitboxType.CIRCLE;
+        this.hitboxReduceOffset = gamePanel.tileSize / 4; //reduce hitbox by 8 pixel
     }
 
     @Override

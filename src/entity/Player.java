@@ -32,6 +32,8 @@ public class Player extends Entity {
         this.tileManager = tileManager;
 
         this.setDefaultValues();
+        this.hitboxType = HitboxType.CIRCLE;
+        this.hitboxReduceOffset = gamePanel.tileSize / 4; //reduce hitbox by 12 pixel
         loadPlayerImages();
     }
 
@@ -45,9 +47,9 @@ public class Player extends Entity {
     public void loadPlayerImages() {
         try {
             imageIdle = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/VariableSizes/Yellow/alienYellow_stand.png"));
-            imageWalk1 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/VariableSizes/Yellow/alienYellow_walk1.png"));
-            imageWalk2 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/VariableSizes/Yellow/alienYellow_walk2.png"));
-            imageJump = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/VariableSizes/Yellow/alienYellow_jump.png"));
+            imageWalk1 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/player1.png"));
+            imageWalk2 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/player2.png"));
+            imageJump = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/player2.png"));
         } catch(IOException e) {
             e.printStackTrace();
         }

@@ -6,6 +6,8 @@ public abstract class Entity {
     protected int x;
     protected int y;
     protected int speed;
+    protected HitboxType hitboxType;
+    protected int hitboxReduceOffset = 0;
 
     protected abstract void draw(Graphics2D g2);
     protected abstract void update();
@@ -32,5 +34,21 @@ public abstract class Entity {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public HitboxType getHitboxType() {
+        return hitboxType;
+    }
+
+    public void setHitboxType(HitboxType hitboxType) {
+        this.hitboxType = hitboxType;
+    }
+
+    public int getHitboxReduceOffset() {
+        return hitboxReduceOffset;
+    }
+
+    public void setHitboxReduceOffset(int hitboxReduceOffset) {
+        this.hitboxReduceOffset = hitboxReduceOffset;
     }
 }
