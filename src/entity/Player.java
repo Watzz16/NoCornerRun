@@ -105,7 +105,7 @@ public class Player extends Entity {
             }
         }
 
-        g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(currentImage, x, y, currentImage.getWidth()/8, currentImage.getHeight()/8, null);
     }
 
     private void walkAnimation() {
