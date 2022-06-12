@@ -1,6 +1,7 @@
 package entity;
 
 import main.GamePanel;
+import main.GameState;
 import main.KeyHandler;
 import tile.TileManager;
 
@@ -20,8 +21,10 @@ public class Player extends Entity {
     private int spriteAnimCounter = 0;
     private int walkAnimSprite = 1;
     private int walkAnimFrameDuration = 7;
+    private static final int maxHealth = 1;
+    private int health = 1;
 
-    int lane = 0;
+    int lane = 1;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler, TileManager tileManager) {
         this.gamePanel = gamePanel;
@@ -51,6 +54,14 @@ public class Player extends Entity {
     }
 
     public void update() {
+        moveLanes();
+        updatePlayerState();
+        checkPlayerHealth();
+        walkAnimation();
+
+    }
+
+    private void moveLanes() {
         if(keyHandler.upKeyPressed) {
             if(lane < tileManager.getLanes().length-1) lane++;
             keyHandler.upKeyPressed = false;
@@ -61,15 +72,21 @@ public class Player extends Entity {
             keyHandler.downKeyPressed = false;
         }
 
+        updatePosition();
+    }
+
+    private void updatePlayerState() {
         //Switch player state to render correct animation / player sprite
         if(!keyHandler.canPressUpKey || !keyHandler.canPressDownKey) {
             playerState = PlayerState.JUMP;
         } else {
             playerState = PlayerState.WALK;
         }
+    }
 
-        walkAnimation();
-
+    private void updatePosition() {
+        int currentLanePositionY = tileManager.getLanes()[lane].getLaneYPosition();
+        this.y = currentLanePositionY-gamePanel.tileSize;
     }
 
     public void draw(Graphics2D g2) {
@@ -86,9 +103,7 @@ public class Player extends Entity {
             }
         }
 
-        int currentLanePositionY = tileManager.getLanes()[lane].getLaneYPosition();
-
-        g2.drawImage(currentImage, x, currentLanePositionY-gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 
     private void walkAnimation() {
@@ -104,4 +119,22 @@ public class Player extends Entity {
         spriteAnimCounter++;
     }
 
+    private void checkPlayerHealth() {
+        if(this.health <= 0) { //player died
+            gamePanel.gameState = GameState.GAMEOVER;
+        }
+    }
+
+    public void resetPlayer() {
+        this.health = 1;
+        this.lane = 1;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
 }

@@ -16,6 +16,7 @@ public class SawEnemy extends Enemy {
         super(walkAnimFrameDuration, tileManager, gamePanel, laneIndex);
         this.x = startXposition;
         this.speed = speed;
+        this.damage = 5;
     }
 
     @Override
@@ -43,13 +44,14 @@ public class SawEnemy extends Enemy {
             }
         }
 
-        int currentLanePositionY = tileManager.getLanes()[this.laneIndex].getLaneYPosition();
-        g2.drawImage(currentImage, this.x, currentLanePositionY-gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(currentImage, this.x, y, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 
     //relative to lane speed
     private void move() {
         this.x -= (tileManager.getLanes()[0].getLaneSpeed() + this.speed);
+        int currentLanePositionY = tileManager.getLanes()[this.laneIndex].getLaneYPosition();
+        this.y = currentLanePositionY-gamePanel.tileSize;
     }
 
     @Override
@@ -57,4 +59,5 @@ public class SawEnemy extends Enemy {
         this.walkAnimation();
         this.move();
     }
+
 }

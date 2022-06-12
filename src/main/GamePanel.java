@@ -3,6 +3,7 @@ package main;
 import entity.Player;
 import entity.enemies.EnemyManager;
 import tile.TileManager;
+import userinterface.UI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,18 +20,27 @@ public class GamePanel extends JPanel implements Runnable {
     public final int tileSize = originalTileSize * scale; //48x48 pixel
     public final int maxScreenCol = 16; //how many tiles in width? Columns
     public final int maxScreenRow = 12; //how many tiles in height? Rows
-    final int screenWidth = tileSize * maxScreenCol; //calculate the pixel width of the window
-    final int screenHeight = tileSize * maxScreenRow; //calculate the pixel height of the window
+    public final int screenWidth = tileSize * maxScreenCol; //calculate the pixel width of the window
+    public final int screenHeight = tileSize * maxScreenRow; //calculate the pixel height of the window
+
+    public double score = 0;
 
     final int FPS = 60;
 
-    KeyHandler keyHandler = new KeyHandler();
+    KeyHandler keyHandler = new KeyHandler(this);
     Thread gameThread;
 
+    Background background = new Background();
     TileManager tileManager = new TileManager(this);
     Player player = new Player(this, this.keyHandler, tileManager);
 
     EnemyManager enemyManager = new EnemyManager(this, tileManager);
+
+    public UI ui = new UI(this);
+
+    public CollisionChecker collisionChecker = new CollisionChecker(this);
+
+    public GameState gameState = GameState.RUNNING;
 
     //this is the constructor. It's a method that is called once a new object of that class is created. It constructs the object
     public GamePanel() {
@@ -46,7 +56,6 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread = new Thread(this);
         gameThread.start();
     }
-
 
     @Override
     public void run() {
@@ -89,28 +98,25 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        if(gameState == GameState.GAMEOVER) return;
+
         player.update();
         tileManager.update();
         enemyManager.update();
+        collisionChecker.checkPlayerCollisionWithEnemies(player, enemyManager);
+        score += 1.0/FPS; //update score relative to fps
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         Graphics2D g2 = (Graphics2D) g;
 
-        BufferedImage purpleWorld;
-        try {
-            purpleWorld = ImageIO.read(getClass().getResourceAsStream("/sprites/Backgrounds/Purple_world.jpg"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        g2.drawImage(purpleWorld, -200, -250, null);
+        background.draw(g2);
         player.draw(g2);
         tileManager.draw(g2);
         enemyManager.draw(g2);
+        ui.draw(g2);
 
         g2.dispose();
     }

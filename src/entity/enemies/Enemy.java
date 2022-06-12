@@ -20,6 +20,7 @@ public abstract class Enemy extends Entity {
     protected TileManager tileManager;
     protected GamePanel gamePanel;
     protected int laneIndex;
+    protected int damage;
 
     public Enemy(int walkAnimFrameDuration, TileManager tileManager, GamePanel gamePanel, int laneIndex) {
         super();
@@ -51,4 +52,15 @@ public abstract class Enemy extends Entity {
         spriteAnimCounter++;
     }
 
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
 }

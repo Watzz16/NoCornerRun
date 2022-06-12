@@ -15,7 +15,7 @@ public class EnemyManager {
     private List<Enemy> enemyList = new ArrayList<>();
     private GamePanel gamePanel;
     private TileManager tileManager;
-    private int concurrentEnemyCount = 10;
+    private int concurrentEnemyCount = 3;
     private int minSpeed = 0;
     private int maxSpeed = 5;
 
@@ -25,19 +25,20 @@ public class EnemyManager {
     }
 
     public void draw(Graphics2D g2) {
-        for(Enemy enemy : enemyList) enemy.draw(g2);
+        for(Iterator<Enemy> iterator = enemyList.iterator(); iterator.hasNext();) {
+            Enemy enemy = iterator.next();
+            enemy.draw(g2);
+        }
     }
 
     public void update() {
-
-        for (Iterator<Enemy> iterator = enemyList.iterator(); iterator.hasNext();) {
+        for(Iterator<Enemy> iterator = enemyList.iterator(); iterator.hasNext();) {
             Enemy enemy = iterator.next();
             enemy.update();
             if((enemy.getX() + gamePanel.tileSize) <= 0) {
                 iterator.remove();
             }
         }
-
         generateRandomEnemies();
     }
 
@@ -45,7 +46,8 @@ public class EnemyManager {
         if(enemyList.size() < concurrentEnemyCount) {
             int randomLaneIndex = ThreadLocalRandom.current().nextInt(0, tileManager.getLanes().length);
             int randomSpeed = ThreadLocalRandom.current().nextInt(minSpeed, maxSpeed+1); //inclusive of max -> add 1
-            enemyList.add(new SawEnemy(tileManager, gamePanel, randomLaneIndex, gamePanel.maxScreenCol*gamePanel.tileSize, randomSpeed));
+            int randomXoffset = ThreadLocalRandom.current().nextInt(0, gamePanel.tileSize * 3); //maximum of 3 tiles of random offset for x spawn coordinate
+            enemyList.add(new SawEnemy(tileManager, gamePanel, randomLaneIndex, (gamePanel.maxScreenCol*gamePanel.tileSize) + randomXoffset, randomSpeed));
         }
     }
 
@@ -72,4 +74,13 @@ public class EnemyManager {
     public void setMaxSpeed(int maxSpeed) {
         this.maxSpeed = maxSpeed;
     }
+
+    public List<Enemy> getEnemyList() {
+        return enemyList;
+    }
+
+    public void resetEnemies() {
+        this.enemyList.clear();
+    }
+
 }
