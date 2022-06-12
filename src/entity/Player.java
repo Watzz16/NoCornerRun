@@ -14,7 +14,7 @@ public class Player extends Entity {
     GamePanel gamePanel;
     KeyHandler keyHandler;
 
-    BufferedImage imageIdle, imageWalk1, imageWalk2, imageJump;
+    BufferedImage imageIdle, imageWalk1, imageWalk2, imageWalk3, imageWalk4, imageJump, imageDead;
     PlayerState playerState = PlayerState.WALK;
     TileManager tileManager;
 
@@ -47,9 +47,12 @@ public class Player extends Entity {
     public void loadPlayerImages() {
         try {
             imageIdle = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/VariableSizes/Yellow/alienYellow_stand.png"));
-            imageWalk1 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/player1.png"));
-            imageWalk2 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/player2.png"));
-            imageJump = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/player2.png"));
+            imageWalk1 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player1.png"));
+            imageWalk2 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player2.png"));
+            imageWalk3 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player3.png"));
+            imageWalk4 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player4.png"));
+            imageJump = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player4.png"));
+            imageDead = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player_dead.png"));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -97,24 +100,28 @@ public class Player extends Entity {
             case IDLE -> currentImage = imageIdle;
             case JUMP -> currentImage = imageJump;
             case WALK -> {
-                if(walkAnimSprite == 1) {
-                    currentImage = imageWalk1;
-                } else {
-                    currentImage = imageWalk2;
+                switch (walkAnimSprite) {
+                    case 1 -> currentImage = imageWalk1;
+                    case 2 -> currentImage = imageWalk2;
+                    case 3 -> currentImage = imageWalk3;
+                    case 4 -> currentImage = imageWalk4;
                 }
             }
+            case DEAD -> currentImage = imageDead;
         }
 
-        g2.drawImage(currentImage, x, y, currentImage.getWidth()/8, currentImage.getHeight()/8, null);
+        g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 
     private void walkAnimation() {
+
         if(spriteAnimCounter > walkAnimFrameDuration) {
-            if(walkAnimSprite == 1) {
-                walkAnimSprite = 2;
+            if(walkAnimSprite < 4) {
+                walkAnimSprite++;
             } else {
                 walkAnimSprite = 1;
             }
+
             spriteAnimCounter = 0;
         }
 
@@ -123,6 +130,7 @@ public class Player extends Entity {
 
     private void checkPlayerHealth() {
         if(this.health <= 0) { //player died
+            playerState = PlayerState.DEAD;
             gamePanel.gameState = GameState.GAMEOVER;
         }
     }
