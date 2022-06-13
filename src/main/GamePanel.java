@@ -2,6 +2,7 @@ package main;
 
 import entity.Player;
 import entity.enemies.EnemyManager;
+import sound.Sound;
 import tile.TileManager;
 import userinterface.UI;
 
@@ -42,6 +43,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public GameState gameState = GameState.RUNNING;
 
+    Sound sound = new Sound();
+
     //this is the constructor. It's a method that is called once a new object of that class is created. It constructs the object
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -50,6 +53,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
+
+        this.playMusic();
     }
 
     public void startGameThread() {
@@ -120,4 +125,20 @@ public class GamePanel extends JPanel implements Runnable {
 
         g2.dispose();
     }
+
+    public void playMusic() {
+        sound.setFile(0);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic() {
+        sound.stop();
+    }
+
+    public void playSoundEffect(int index) {
+        sound.setFile(index);
+        sound.play();
+    }
+
 }

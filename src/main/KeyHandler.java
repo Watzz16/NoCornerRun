@@ -56,6 +56,7 @@ public class KeyHandler implements KeyListener {
             gamePanel.player.resetPlayer();
             gamePanel.enemyManager.resetEnemies();
             gamePanel.score = 0.0; //reset score
+            gamePanel.playMusic();
         }
     }
 }

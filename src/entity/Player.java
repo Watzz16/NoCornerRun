@@ -51,7 +51,7 @@ public class Player extends Entity {
             imageWalk2 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player2.png"));
             imageWalk3 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player3.png"));
             imageWalk4 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player4.png"));
-            imageJump = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player4.png"));
+            imageJump = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player1.png"));
             imageDead = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player_dead.png"));
         } catch(IOException e) {
             e.printStackTrace();
@@ -63,7 +63,6 @@ public class Player extends Entity {
         updatePlayerState();
         checkPlayerHealth();
         walkAnimation();
-
     }
 
     private void moveLanes() {
@@ -132,6 +131,7 @@ public class Player extends Entity {
         if(this.health <= 0) { //player died
             playerState = PlayerState.DEAD;
             gamePanel.gameState = GameState.GAMEOVER;
+            gamePanel.stopMusic();
         }
     }
 
