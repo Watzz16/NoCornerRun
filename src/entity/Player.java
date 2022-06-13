@@ -21,6 +21,7 @@ public class Player extends Entity {
     private int spriteAnimCounter = 0;
     private int walkAnimSprite = 1;
     private int walkAnimFrameDuration = 7;
+    private int numberOfWalkSprites = 3;
     private static final int maxHealth = 1;
     private int health = 1;
 
@@ -47,11 +48,11 @@ public class Player extends Entity {
     public void loadPlayerImages() {
         try {
             imageIdle = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/VariableSizes/Yellow/alienYellow_stand.png"));
-            imageWalk1 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player1.png"));
-            imageWalk2 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player2.png"));
-            imageWalk3 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player3.png"));
-            imageWalk4 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player4.png"));
-            imageJump = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player1.png"));
+            imageWalk1 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/melon/player1.png"));
+            imageWalk2 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/melon/player2.png"));
+            imageWalk3 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/melon/player3.png"));
+            //imageWalk4 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player4.png"));
+            imageJump = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/melon/player3.png"));
             imageDead = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player_dead.png"));
         } catch(IOException e) {
             e.printStackTrace();
@@ -103,19 +104,20 @@ public class Player extends Entity {
                     case 1 -> currentImage = imageWalk1;
                     case 2 -> currentImage = imageWalk2;
                     case 3 -> currentImage = imageWalk3;
-                    case 4 -> currentImage = imageWalk4;
+                    //case 4 -> currentImage = imageWalk4;
                 }
             }
             case DEAD -> currentImage = imageDead;
         }
 
-        g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
+        //g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(currentImage, x, y, currentImage.getWidth()/8, currentImage.getHeight()/8, null);
     }
 
     private void walkAnimation() {
 
         if(spriteAnimCounter > walkAnimFrameDuration) {
-            if(walkAnimSprite < 4) {
+            if(walkAnimSprite < numberOfWalkSprites) {
                 walkAnimSprite++;
             } else {
                 walkAnimSprite = 1;
