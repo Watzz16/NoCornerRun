@@ -34,10 +34,10 @@ public abstract class Enemy extends Entity {
     abstract void loadImages();
 
     @Override
-    protected void draw(Graphics2D g2) { }
+    public void draw(Graphics2D g2) { }
 
     @Override
-    protected void update() { }
+    public void update() { }
 
     protected void walkAnimation() {
         if(spriteAnimCounter > walkAnimFrameDuration) {

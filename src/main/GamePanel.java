@@ -2,6 +2,7 @@ package main;
 
 import entity.Player;
 import entity.enemies.EnemyManager;
+import entity.items.ItemManager;
 import sound.Sound;
 import tile.TileManager;
 import userinterface.UI;
@@ -26,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public double score = 0;
 
-    final int FPS = 60;
+    public final int FPS = 60;
 
     KeyHandler keyHandler = new KeyHandler(this);
     Thread gameThread;
@@ -36,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
     Player player = new Player(this, this.keyHandler, tileManager);
 
     EnemyManager enemyManager = new EnemyManager(this, tileManager);
+    ItemManager itemManager = new ItemManager(this, tileManager);
 
     public UI ui = new UI(this);
 
@@ -108,6 +110,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.update();
         tileManager.update();
         enemyManager.update();
+        itemManager.updateItems();
         collisionChecker.checkPlayerCollisionWithEnemies(player, enemyManager);
         score += 1.0/FPS; //update score relative to fps
     }
@@ -118,9 +121,12 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         background.draw(g2);
-        player.draw(g2);
         tileManager.draw(g2);
+        itemManager.draw(g2);
+
         enemyManager.draw(g2);
+        player.draw(g2);
+
         ui.draw(g2);
 
         g2.dispose();

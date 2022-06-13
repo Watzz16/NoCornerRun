@@ -9,8 +9,8 @@ public abstract class Entity {
     protected HitboxType hitboxType;
     protected int hitboxReduceOffset = 0;
 
-    protected abstract void draw(Graphics2D g2);
-    protected abstract void update();
+    public abstract void draw(Graphics2D g2);
+    public abstract void update();
 
     public int getX() {
         return x;

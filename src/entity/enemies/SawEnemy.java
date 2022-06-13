@@ -34,7 +34,7 @@ public class SawEnemy extends Enemy {
     }
 
     @Override
-    protected void draw(Graphics2D g2) {
+    public void draw(Graphics2D g2) {
         BufferedImage currentImage = null;
         switch(this.enemyState) {
             case DEAD -> currentImage = this.imageDead;
@@ -47,7 +47,7 @@ public class SawEnemy extends Enemy {
             }
         }
 
-        g2.drawImage(currentImage, this.x, y, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 
     //relative to lane speed
@@ -58,7 +58,7 @@ public class SawEnemy extends Enemy {
     }
 
     @Override
-    protected void update() {
+    public void update() {
         this.walkAnimation();
         this.move();
     }

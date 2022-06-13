@@ -55,6 +55,7 @@ public class KeyHandler implements KeyListener {
             gamePanel.gameState = GameState.RUNNING;
             gamePanel.player.resetPlayer();
             gamePanel.enemyManager.resetEnemies();
+            gamePanel.itemManager.resetItems();
             gamePanel.score = 0.0; //reset score
             gamePanel.playMusic();
         }
