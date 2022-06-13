@@ -21,7 +21,7 @@ public class Lane {
     }
 
     private void loadTileImages() {
-        tiles = new Tile[gamePanel.maxScreenCol+1];
+        tiles = new Tile[gamePanel.maxScreenCol+2];
 
         BufferedImage grassSprite;
         try {
@@ -40,7 +40,7 @@ public class Lane {
             tile.setX(tile.getX() - laneSpeed);
 
             if( (tile.getX() + gamePanel.tileSize) <= 0) {
-                tile.setX(gamePanel.maxScreenCol * gamePanel.tileSize);
+                tile.setX((gamePanel.maxScreenCol+1) * gamePanel.tileSize+ + tile.getX()); //adding x coordinate in case current x is less than 0
             }
         }
     }
@@ -57,6 +57,10 @@ public class Lane {
 
     public int getLaneSpeed() {
         return this.laneSpeed;
+    }
+
+    public void setLaneSpeed(int laneSpeed) {
+        this.laneSpeed = laneSpeed;
     }
 
 }

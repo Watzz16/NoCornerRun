@@ -4,6 +4,7 @@ import entity.Player;
 import entity.enemies.EnemyManager;
 import entity.items.ItemManager;
 import sound.Sound;
+import tile.LevelManager;
 import tile.TileManager;
 import userinterface.UI;
 
@@ -38,6 +39,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     EnemyManager enemyManager = new EnemyManager(this, tileManager);
     ItemManager itemManager = new ItemManager(this, tileManager);
+
+    LevelManager levelManager = new LevelManager(this, tileManager, enemyManager, itemManager);
 
     public UI ui = new UI(this);
 
@@ -112,6 +115,8 @@ public class GamePanel extends JPanel implements Runnable {
         enemyManager.update();
         itemManager.updateItems();
         collisionChecker.checkPlayerCollisionWithEnemies(player, enemyManager);
+        levelManager.update();
+
         score += 1.0/FPS; //update score relative to fps
     }
 
