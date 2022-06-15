@@ -22,8 +22,10 @@ public class Player extends Entity {
     private int walkAnimSprite = 1;
     private int walkAnimFrameDuration = 7;
     private int numberOfWalkSprites = 3;
-    private static final int maxHealth = 1;
+    private final int maxHealth = 1;
     private int health = 1;
+    private int currentFireChargeCount = 0;
+    private final int maxFireChargeCount = 3;
 
     int lane = 1;
 
@@ -110,8 +112,8 @@ public class Player extends Entity {
             case DEAD -> currentImage = imageDead;
         }
 
-        //g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
-        g2.drawImage(currentImage, x, y, currentImage.getWidth()/8, currentImage.getHeight()/8, null);
+        g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
+        //g2.drawImage(currentImage, x, y, currentImage.getWidth()/8, currentImage.getHeight()/8, null);
     }
 
     private void walkAnimation() {
@@ -148,5 +150,17 @@ public class Player extends Entity {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public int getCurrentFireChargeCount() {
+        return currentFireChargeCount;
+    }
+
+    public void setCurrentFireChargeCount(int currentFireChargeCount) {
+        this.currentFireChargeCount = currentFireChargeCount;
+    }
+
+    public int getMaxFireChargeCount() {
+        return maxFireChargeCount;
     }
 }

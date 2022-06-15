@@ -46,8 +46,8 @@ public class EnemyManager {
         if(enemyList.size() < concurrentEnemyCount) {
             int randomLaneIndex = ThreadLocalRandom.current().nextInt(0, tileManager.getLanes().length);
             int randomSpeed = ThreadLocalRandom.current().nextInt(minSpeed, maxSpeed+1); //inclusive of max -> add 1
-            int randomXoffset = ThreadLocalRandom.current().nextInt(0, gamePanel.tileSize * 3); //maximum of 3 tiles of random offset for x spawn coordinate
-            enemyList.add(new SawEnemy(tileManager, gamePanel, randomLaneIndex, (gamePanel.maxScreenCol*gamePanel.tileSize) + randomXoffset, randomSpeed));
+            int randomTileOffset = ThreadLocalRandom.current().nextInt(0, 5); //maximum of 5 tiles of random offset for x spawn coordinate
+            enemyList.add(new SawEnemy(tileManager, gamePanel, randomLaneIndex, (gamePanel.maxScreenCol + randomTileOffset) * gamePanel.tileSize, randomSpeed));
         }
     }
 

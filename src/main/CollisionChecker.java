@@ -5,7 +5,11 @@ import entity.HitboxType;
 import entity.Player;
 import entity.enemies.Enemy;
 import entity.enemies.EnemyManager;
+import entity.items.Gem;
+import entity.items.ItemCrate;
+import entity.items.ItemManager;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class CollisionChecker {
@@ -20,6 +24,25 @@ public class CollisionChecker {
         for(Enemy enemy : enemyManager.getEnemyList()) {
             if(checkCollisionBetweenEntities(player, enemy)) {
                 player.setHealth(player.getHealth() - enemy.getDamage());
+            }
+        }
+    }
+
+    public void checkPlayerCollisionWithItems(Player player, ItemManager itemManager) {
+        for(Iterator<Gem> iterator = itemManager.getGemManager().getGemList().iterator(); iterator.hasNext();) {
+            Gem gem = iterator.next();
+            if(checkCollisionBetweenEntities(player, gem)) {
+                iterator.remove();
+                gamePanel.currentlyCollectedGems++;
+            }
+        }
+        for(Iterator<ItemCrate> iterator = itemManager.getItemCrateManager().getItemCrateList().iterator(); iterator.hasNext();) {
+            ItemCrate itemCrate = iterator.next();
+            if(checkCollisionBetweenEntities(player, itemCrate)) {
+                iterator.remove();
+                if(player.getCurrentFireChargeCount() < player.getMaxFireChargeCount()) {
+                    player.setCurrentFireChargeCount(player.getCurrentFireChargeCount()+1);
+                }
             }
         }
     }

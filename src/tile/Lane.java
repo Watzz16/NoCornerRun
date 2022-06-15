@@ -14,6 +14,8 @@ public class Lane {
     private GamePanel gamePanel;
     private int laneSpeed = 3;
 
+    private Tile endingTile = null;
+
     public Lane(int yPosition, GamePanel gamePanel) {
         this.yPosition = yPosition;
         this.gamePanel = gamePanel;
@@ -22,6 +24,7 @@ public class Lane {
 
     private void loadTileImages() {
         tiles = new Tile[gamePanel.maxScreenCol+2];
+        endingTile = tiles[gamePanel.maxScreenCol-1];
 
         BufferedImage grassSprite;
         try {
@@ -36,11 +39,12 @@ public class Lane {
     }
 
     public void update() {
-        for(Tile tile : tiles) {
-            tile.setX(tile.getX() - laneSpeed);
+        for(int i = 0; i < tiles.length; i++) {
+            tiles[i].setX(tiles[i].getX() - laneSpeed);
 
-            if( (tile.getX() + gamePanel.tileSize) <= 0) {
-                tile.setX((gamePanel.maxScreenCol+1) * gamePanel.tileSize+ + tile.getX()); //adding x coordinate in case current x is less than 0
+            if( (tiles[i].getX() + gamePanel.tileSize) <= 0) {
+                tiles[i].setX((gamePanel.maxScreenCol+1) * gamePanel.tileSize + tiles[i].getX()); //adding x coordinate in case current x is less than 0
+                endingTile = tiles[i];
             }
         }
     }
@@ -49,6 +53,10 @@ public class Lane {
         for(Tile tile : tiles) {
             g2.drawImage(tile.texture, tile.getX(), tile.getY(), gamePanel.tileSize, gamePanel.tileSize, null);
         }
+    }
+
+    public int getXPosOfRightmostTile() {
+        return endingTile.getX();
     }
 
     public int getLaneYPosition() {
