@@ -24,6 +24,7 @@ public class UI {
         if(gamePanel.gameState == GameState.RUNNING) {
             drawScore(g2);
             drawAvailableFireCharges(g2);
+            drawGems(g2);
         }
     }
 
@@ -38,15 +39,28 @@ public class UI {
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(20f));
         String text = gamePanel.player.getCurrentFireChargeCount() + "x";
-        g2.drawString(text, (gamePanel.maxScreenCol-5)* gamePanel.tileSize, gamePanel.tileSize);
+        g2.drawString(text, (gamePanel.maxScreenCol-6)* gamePanel.tileSize, gamePanel.tileSize);
         BufferedImage fireChargeImage = null;
         try {
             fireChargeImage = ImageIO.read(getClass().getResourceAsStream("/sprites/Particles/fireball.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        g2.drawImage(fireChargeImage, (gamePanel.maxScreenCol-6)* gamePanel.tileSize + 10, 16, gamePanel.tileSize, gamePanel.tileSize, null);
+    }
 
-        g2.drawImage(fireChargeImage, (gamePanel.maxScreenCol-5)* gamePanel.tileSize + 10, 16, gamePanel.tileSize, gamePanel.tileSize, null);
+    private void drawGems(Graphics2D g2) {
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(20f));
+        String text = gamePanel.currentlyCollectedGems + "x";
+        g2.drawString(text, (gamePanel.maxScreenCol-4)* gamePanel.tileSize - 24, gamePanel.tileSize);
+        BufferedImage gemImage = null;
+        try {
+            gemImage = ImageIO.read(getClass().getResourceAsStream("/sprites/Items/gemBlue.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        g2.drawImage(gemImage, (gamePanel.maxScreenCol-4)* gamePanel.tileSize - 10, 16, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 
     private void drawGameOverScreen(Graphics2D g2) {

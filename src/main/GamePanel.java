@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenHeight = tileSize * maxScreenRow; //calculate the pixel height of the window
 
     public double score = 0;
-    public double currentlyCollectedGems = 0;
+    public int currentlyCollectedGems = 0;
 
     public final int FPS = 60;
 
