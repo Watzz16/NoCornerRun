@@ -12,6 +12,9 @@ public class KeyHandler implements KeyListener {
     public boolean downKeyPressed = false;
     public boolean canPressDownKey = true;
 
+    public boolean rightKeyPressed = false;
+    public boolean canPressRight = true;
+
     private GamePanel gamePanel;
 
     public KeyHandler(GamePanel gamePanel) {
@@ -37,6 +40,9 @@ public class KeyHandler implements KeyListener {
         } else if(code == KeyEvent.VK_DOWN) {
             downKeyPressed = false;
             canPressDownKey = true;
+        } else if(code == KeyEvent.VK_RIGHT) {
+            rightKeyPressed = false;
+            canPressRight = true;
         }
     }
 
@@ -47,6 +53,9 @@ public class KeyHandler implements KeyListener {
         } else if(code == KeyEvent.VK_DOWN && canPressDownKey) {
             downKeyPressed = true;
             canPressDownKey = false;
+        } else if(code == KeyEvent.VK_RIGHT && canPressRight) {
+            rightKeyPressed = true;
+            canPressRight = false;
         }
     }
 

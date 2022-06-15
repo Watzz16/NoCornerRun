@@ -3,6 +3,7 @@ package main;
 import entity.Player;
 import entity.enemies.EnemyManager;
 import entity.items.ItemManager;
+import entity.particles.AbilityManager;
 import sound.Sound;
 import tile.LevelManager;
 import tile.TileManager;
@@ -36,10 +37,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     Background background = new Background();
     TileManager tileManager = new TileManager(this);
-    Player player = new Player(this, this.keyHandler, tileManager);
+    public Player player = new Player(this, this.keyHandler, tileManager);
 
     EnemyManager enemyManager = new EnemyManager(this, tileManager);
     ItemManager itemManager = new ItemManager(this, tileManager);
+    public AbilityManager abilityManager = new AbilityManager(this, tileManager);
 
     LevelManager levelManager = new LevelManager(this, tileManager, enemyManager, itemManager);
 
@@ -115,8 +117,10 @@ public class GamePanel extends JPanel implements Runnable {
         tileManager.update();
         enemyManager.update();
         itemManager.updateItems();
+        abilityManager.updateFireCharges();
         collisionChecker.checkPlayerCollisionWithEnemies(player, enemyManager);
         collisionChecker.checkPlayerCollisionWithItems(player, itemManager);
+        collisionChecker.checkEnemyCollisionWithParticles(enemyManager, abilityManager);
         levelManager.update();
 
         score += 1.0/FPS; //update score relative to fps
@@ -133,6 +137,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         enemyManager.draw(g2);
         player.draw(g2);
+        abilityManager.drawFireCharges(g2);
 
         ui.draw(g2);
 

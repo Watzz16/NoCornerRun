@@ -1,5 +1,6 @@
 package entity;
 
+import entity.particles.FireCharge;
 import main.GamePanel;
 import main.GameState;
 import main.KeyHandler;
@@ -24,7 +25,7 @@ public class Player extends Entity {
     private int numberOfWalkSprites = 3;
     private final int maxHealth = 1;
     private int health = 1;
-    private int currentFireChargeCount = 0;
+    private int currentFireChargeCount = 1;
     private final int maxFireChargeCount = 3;
 
     int lane = 1;
@@ -66,6 +67,7 @@ public class Player extends Entity {
         updatePlayerState();
         checkPlayerHealth();
         walkAnimation();
+        shootFireCharges();
     }
 
     private void moveLanes() {
@@ -80,6 +82,14 @@ public class Player extends Entity {
         }
 
         updatePosition();
+    }
+
+    private void shootFireCharges() {
+        if(currentFireChargeCount > 0 && keyHandler.rightKeyPressed) {
+            gamePanel.abilityManager.getFireCharges().add(new FireCharge(gamePanel, tileManager, this.x, this.y));
+            currentFireChargeCount--;
+            keyHandler.rightKeyPressed = false;
+        }
     }
 
     private void updatePlayerState() {
@@ -142,6 +152,7 @@ public class Player extends Entity {
     public void resetPlayer() {
         this.health = 1;
         this.lane = 1;
+        this.currentFireChargeCount = 1;
     }
 
     public int getHealth() {

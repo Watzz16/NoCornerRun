@@ -3,7 +3,10 @@ package userinterface;
 import main.GamePanel;
 import main.GameState;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class UI {
     GamePanel gamePanel;
@@ -18,7 +21,10 @@ public class UI {
         g2.setFont(gameFont);
 
         if(gamePanel.gameState == GameState.GAMEOVER) drawGameOverScreen(g2);
-        if(gamePanel.gameState == GameState.RUNNING) drawScore(g2);
+        if(gamePanel.gameState == GameState.RUNNING) {
+            drawScore(g2);
+            drawAvailableFireCharges(g2);
+        }
     }
 
     private void drawScore(Graphics2D g2) {
@@ -26,6 +32,21 @@ public class UI {
         g2.setFont(g2.getFont().deriveFont(20f));
         String text = "Score: " + (int) gamePanel.score;
         g2.drawString(text, (gamePanel.maxScreenCol-3)* gamePanel.tileSize, gamePanel.tileSize);
+    }
+
+    private void drawAvailableFireCharges(Graphics2D g2) {
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(20f));
+        String text = gamePanel.player.getCurrentFireChargeCount() + "x";
+        g2.drawString(text, (gamePanel.maxScreenCol-5)* gamePanel.tileSize, gamePanel.tileSize);
+        BufferedImage fireChargeImage = null;
+        try {
+            fireChargeImage = ImageIO.read(getClass().getResourceAsStream("/sprites/Particles/fireball.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        g2.drawImage(fireChargeImage, (gamePanel.maxScreenCol-5)* gamePanel.tileSize + 10, 16, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 
     private void drawGameOverScreen(Graphics2D g2) {

@@ -8,6 +8,8 @@ import entity.enemies.EnemyManager;
 import entity.items.Gem;
 import entity.items.ItemCrate;
 import entity.items.ItemManager;
+import entity.particles.AbilityManager;
+import entity.particles.FireCharge;
 
 import java.util.Iterator;
 import java.util.List;
@@ -38,10 +40,27 @@ public class CollisionChecker {
         }
         for(Iterator<ItemCrate> iterator = itemManager.getItemCrateManager().getItemCrateList().iterator(); iterator.hasNext();) {
             ItemCrate itemCrate = iterator.next();
-            if(checkCollisionBetweenEntities(player, itemCrate)) {
+            if(checkCollisionBetweenEntities(player, itemCrate) && player.getCurrentFireChargeCount() < player.getMaxFireChargeCount()) {
                 iterator.remove();
                 if(player.getCurrentFireChargeCount() < player.getMaxFireChargeCount()) {
                     player.setCurrentFireChargeCount(player.getCurrentFireChargeCount()+1);
+                }
+            }
+        }
+    }
+
+    //O(n^2) time complexity
+    public void checkEnemyCollisionWithParticles(EnemyManager enemyManager, AbilityManager abilityManager) {
+        for(Iterator<FireCharge> fireChargeIterator = abilityManager.getFireCharges().iterator(); fireChargeIterator.hasNext();) {
+            FireCharge fireCharge = fireChargeIterator.next();
+
+            for(Iterator<Enemy> enemyIterator = enemyManager.getEnemyList().iterator(); enemyIterator.hasNext();) {
+                Enemy enemy = enemyIterator.next();
+
+                if(checkCollisionBetweenEntities(fireCharge, enemy)) {
+                    fireChargeIterator.remove();
+                    enemyIterator.remove();
+                    break;
                 }
             }
         }

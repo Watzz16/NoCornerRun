@@ -13,7 +13,7 @@ public class ItemCrateManager {
 
     private List<ItemCrate> itemCrateList = new ArrayList<>();
     private double itemCrateSecondCounter = 0;
-    private int itemCrateSpawnInterval = 10; //every 10 seconds spawn an itemCrate with a chance of
+    private int itemCrateSpawnInterval = 5; //every 10 seconds spawn an itemCrate with a chance of
     private double itemCrateSpawnChance = 0.4; //40%
 
     private GamePanel gamePanel;
