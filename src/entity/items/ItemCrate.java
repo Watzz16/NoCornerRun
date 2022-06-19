@@ -20,7 +20,7 @@ public class ItemCrate extends Item {
     @Override
     protected void loadSprite() {
         try {
-            this.sprite = ImageIO.read(getClass().getResourceAsStream("/sprites/Tiles/boxItem.png"));
+            this.sprite = ImageIO.read(getClass().getResourceAsStream("/sprites/Tiles/crate.png"));
         } catch(IOException e) {
             e.printStackTrace();
         }

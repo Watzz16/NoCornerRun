@@ -28,7 +28,7 @@ public class Lane {
 
         BufferedImage grassSprite;
         try {
-            grassSprite = ImageIO.read(getClass().getResourceAsStream("/sprites/Ground/Grass/grass.png"));
+            grassSprite = ImageIO.read(getClass().getResourceAsStream("/sprites/Ground/grass.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
