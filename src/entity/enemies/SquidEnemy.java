@@ -14,7 +14,7 @@ public class SquidEnemy extends Enemy {
     private static final int walkAnimFrameDuration = 10;
 
     public SquidEnemy(TileManager tileManager, GamePanel gamePanel, int laneIndex, int startXposition, int speed) {
-        super(walkAnimFrameDuration, tileManager, gamePanel, laneIndex, 3);
+        super(walkAnimFrameDuration, tileManager, gamePanel, laneIndex, 4);
         this.x = startXposition;
         this.speed = speed;
         this.damage = 5;
@@ -28,6 +28,7 @@ public class SquidEnemy extends Enemy {
             this.walkImages[0] = ImageIO.read(getClass().getResourceAsStream("/sprites/Enemies/squid/squid1.png"));
             this.walkImages[1] = ImageIO.read(getClass().getResourceAsStream("/sprites/Enemies/squid/squid2.png"));
             this.walkImages[2] = ImageIO.read(getClass().getResourceAsStream("/sprites/Enemies/squid/squid3.png"));
+            this.walkImages[3] = ImageIO.read(getClass().getResourceAsStream("/sprites/Enemies/squid/squid2.png"));
             this.imageDead = ImageIO.read(getClass().getResourceAsStream("/sprites/Enemies/squid/squid1.png"));
         } catch(IOException e) {
             e.printStackTrace();
