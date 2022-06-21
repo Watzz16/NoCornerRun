@@ -37,34 +37,39 @@ public class LevelManager {
     private void setToLevel1() {
         for(Lane lane : tileManager.getLanes()) lane.setLaneSpeed(3); //3
         enemyManager.setConcurrentEnemyCount(3); //3
+        enemyManager.setConcurrentSquidCount(0); //0
         enemyManager.setMinSpeed(0); //0
         enemyManager.setMaxSpeed(0); //ß
     }
 
     private void setToLevel2() {
         for(Lane lane : tileManager.getLanes()) lane.setLaneSpeed(4);
-        enemyManager.setConcurrentEnemyCount(4);
+        enemyManager.setConcurrentEnemyCount(3);
+        enemyManager.setConcurrentSquidCount(1);
         enemyManager.setMinSpeed(0);
         enemyManager.setMaxSpeed(1);
     }
 
     private void setToLevel3() {
         for(Lane lane : tileManager.getLanes()) lane.setLaneSpeed(5);
-        enemyManager.setConcurrentEnemyCount(5);
+        enemyManager.setConcurrentEnemyCount(4);
+        enemyManager.setConcurrentSquidCount(2);
         enemyManager.setMinSpeed(0);
         enemyManager.setMaxSpeed(2);
     }
 
     private void setToLevel4() {
         for(Lane lane : tileManager.getLanes()) lane.setLaneSpeed(7);
-        enemyManager.setConcurrentEnemyCount(5);
+        enemyManager.setConcurrentEnemyCount(3);
+        enemyManager.setConcurrentSquidCount(3);
         enemyManager.setMinSpeed(1);
         enemyManager.setMaxSpeed(4);
     }
 
     private void setToLevel5() {
         for(Lane lane : tileManager.getLanes()) lane.setLaneSpeed(8);
-        enemyManager.setConcurrentEnemyCount(8);
+        enemyManager.setConcurrentEnemyCount(4);
+        enemyManager.setConcurrentSquidCount(4);
         enemyManager.setMinSpeed(3);
         enemyManager.setMaxSpeed(5);
     }

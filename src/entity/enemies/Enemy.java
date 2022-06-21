@@ -12,7 +12,8 @@ import java.io.IOException;
 public abstract class Enemy extends Entity {
 
     protected int health;
-    protected BufferedImage imageWalk1, imageWalk2, imageDead;
+    protected BufferedImage imageDead;
+    protected BufferedImage[] walkImages;
     private int spriteAnimCounter = 0;
     protected int walkAnimSprite = 1;
     protected int walkAnimFrameDuration;
@@ -21,13 +22,16 @@ public abstract class Enemy extends Entity {
     protected GamePanel gamePanel;
     protected int laneIndex;
     protected int damage;
+    private int numberOfWalkImages = 0;
 
-    public Enemy(int walkAnimFrameDuration, TileManager tileManager, GamePanel gamePanel, int laneIndex) {
+    public Enemy(int walkAnimFrameDuration, TileManager tileManager, GamePanel gamePanel, int laneIndex, int numberOfWalkImages) {
         super();
         this.tileManager = tileManager;
         this.walkAnimFrameDuration = walkAnimFrameDuration;
         this.gamePanel = gamePanel;
         this.laneIndex = laneIndex;
+        this.numberOfWalkImages = numberOfWalkImages;
+        this.walkImages = new BufferedImage[numberOfWalkImages];
         this.loadImages();
     }
 
@@ -41,11 +45,12 @@ public abstract class Enemy extends Entity {
 
     protected void walkAnimation() {
         if(spriteAnimCounter > walkAnimFrameDuration) {
-            if(walkAnimSprite == 1) {
-                walkAnimSprite = 2;
+            if(walkAnimSprite < numberOfWalkImages-1) {
+                walkAnimSprite++;
             } else {
-                walkAnimSprite = 1;
+                walkAnimSprite = 0;
             }
+
             spriteAnimCounter = 0;
         }
 

@@ -18,6 +18,8 @@ public class EnemyManager {
     private int concurrentEnemyCount = 3;
     private int minSpeed = 0;
     private int maxSpeed = 0;
+    private int concurrentSquidCount = 0;
+    private int minSpeedSquid = 2;
 
     public EnemyManager(GamePanel gamePanel, TileManager tileManager) {
         this.gamePanel = gamePanel;
@@ -43,11 +45,20 @@ public class EnemyManager {
     }
 
     private void generateRandomEnemies() {
+        //generate saws
         if(enemyList.size() < concurrentEnemyCount) {
             int randomLaneIndex = ThreadLocalRandom.current().nextInt(0, tileManager.getLanes().length);
             int randomSpeed = ThreadLocalRandom.current().nextInt(minSpeed, maxSpeed+1); //inclusive of max -> add 1
             int randomTileOffset = ThreadLocalRandom.current().nextInt(0, 5); //maximum of 5 tiles of random offset for x spawn coordinate
             enemyList.add(new SawEnemy(tileManager, gamePanel, randomLaneIndex, (gamePanel.maxScreenCol + randomTileOffset) * gamePanel.tileSize, randomSpeed));
+        }
+
+        //generate squids
+        if(enemyList.size() == concurrentEnemyCount && enemyList.size() < concurrentEnemyCount+concurrentSquidCount) {
+            int randomLaneIndex = ThreadLocalRandom.current().nextInt(0, tileManager.getLanes().length);
+            int randomSpeed = ThreadLocalRandom.current().nextInt(minSpeedSquid, (minSpeedSquid < maxSpeed ? maxSpeed+1 : minSpeedSquid+1)); //inclusive of max -> add 1
+            int randomTileOffset = ThreadLocalRandom.current().nextInt(0, 5); //maximum of 5 tiles of random offset for x spawn coordinate
+            enemyList.add(new SquidEnemy(tileManager, gamePanel, randomLaneIndex, (gamePanel.maxScreenCol + randomTileOffset) * gamePanel.tileSize, randomSpeed));
         }
     }
 
@@ -57,6 +68,14 @@ public class EnemyManager {
 
     public void setConcurrentEnemyCount(int concurrentEnemyCount) {
         this.concurrentEnemyCount = concurrentEnemyCount;
+    }
+
+    public int getConcurrentSquidCount() {
+        return concurrentSquidCount;
+    }
+
+    public void setConcurrentSquidCount(int concurrentSquidCount) {
+        this.concurrentSquidCount = concurrentSquidCount;
     }
 
     public int getMinSpeed() {
