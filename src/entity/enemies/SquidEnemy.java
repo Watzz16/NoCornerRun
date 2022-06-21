@@ -13,8 +13,9 @@ public class SquidEnemy extends Enemy {
 
     private static final int walkAnimFrameDuration = 10;
     private int floatAnimFrameCounter = 0;
-    private int floatAnimUpdateNeededFrames = 5;
+    private int floatAnimUpdateNeededFrames = 3;
     private int floatAnimOffset = 0;
+    private final int floatAnimStaticOffset = 5;
     private final int floatAnimDeviationFromZero = 3;
     private boolean floatAnimUp = true;
 
@@ -57,7 +58,7 @@ public class SquidEnemy extends Enemy {
     private void move() {
         this.x -= (tileManager.getLanes()[0].getLaneSpeed() + this.speed);
         int currentLanePositionY = tileManager.getLanes()[this.laneIndex].getLaneYPosition();
-        this.y = currentLanePositionY-walkImages[0].getHeight()/12 + floatAnimOffset;
+        this.y = currentLanePositionY-walkImages[0].getHeight()/12 + floatAnimOffset - floatAnimStaticOffset;
     }
 
     @Override
