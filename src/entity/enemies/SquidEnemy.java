@@ -12,6 +12,11 @@ import java.io.IOException;
 public class SquidEnemy extends Enemy {
 
     private static final int walkAnimFrameDuration = 10;
+    private int floatAnimFrameCounter = 0;
+    private int floatAnimUpdateNeededFrames = 5;
+    private int floatAnimOffset = 0;
+    private final int floatAnimDeviationFromZero = 3;
+    private boolean floatAnimUp = true;
 
     public SquidEnemy(TileManager tileManager, GamePanel gamePanel, int laneIndex, int startXposition, int speed) {
         super(walkAnimFrameDuration, tileManager, gamePanel, laneIndex, 4);
@@ -52,13 +57,33 @@ public class SquidEnemy extends Enemy {
     private void move() {
         this.x -= (tileManager.getLanes()[0].getLaneSpeed() + this.speed);
         int currentLanePositionY = tileManager.getLanes()[this.laneIndex].getLaneYPosition();
-        this.y = currentLanePositionY-walkImages[0].getHeight()/12;
+        this.y = currentLanePositionY-walkImages[0].getHeight()/12 + floatAnimOffset;
     }
 
     @Override
     public void update() {
         this.walkAnimation();
         this.move();
+
+        if(floatAnimFrameCounter >= floatAnimUpdateNeededFrames) {
+            this.updateFloatAnim();
+            floatAnimFrameCounter = 0;
+        }
+        floatAnimFrameCounter++;
+    }
+
+    private void updateFloatAnim() {
+        if(floatAnimOffset == floatAnimDeviationFromZero) {
+            floatAnimUp = false;
+        } else if(floatAnimOffset == -floatAnimDeviationFromZero) {
+            floatAnimUp = true;
+        }
+
+        if(floatAnimUp) {
+            floatAnimOffset++;
+        } else {
+            floatAnimOffset--;
+        }
     }
 
 
