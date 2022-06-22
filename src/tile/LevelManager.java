@@ -60,7 +60,7 @@ public class LevelManager {
 
     private void setToLevel4() {
         for(Lane lane : tileManager.getLanes()) lane.setLaneSpeed(7);
-        enemyManager.setConcurrentEnemyCount(3);
+        enemyManager.setConcurrentEnemyCount(4);
         enemyManager.setConcurrentSquidCount(3);
         enemyManager.setMinSpeed(1);
         enemyManager.setMaxSpeed(4);
@@ -68,7 +68,7 @@ public class LevelManager {
 
     private void setToLevel5() {
         for(Lane lane : tileManager.getLanes()) lane.setLaneSpeed(8);
-        enemyManager.setConcurrentEnemyCount(4);
+        enemyManager.setConcurrentEnemyCount(5);
         enemyManager.setConcurrentSquidCount(4);
         enemyManager.setMinSpeed(3);
         enemyManager.setMaxSpeed(5);

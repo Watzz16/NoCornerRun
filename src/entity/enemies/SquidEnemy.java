@@ -13,10 +13,10 @@ public class SquidEnemy extends Enemy {
 
     private static final int walkAnimFrameDuration = 10;
     private int floatAnimFrameCounter = 0;
-    private int floatAnimUpdateNeededFrames = 3;
+    private int floatAnimUpdateNeededFrames = 5;
     private int floatAnimOffset = 0;
-    private final int floatAnimStaticOffset = 5;
-    private final int floatAnimDeviationFromZero = 3;
+    private final int floatAnimStaticOffset = 3;
+    private final int floatAnimDeviationFromZero = 4;
     private boolean floatAnimUp = true;
 
     public SquidEnemy(TileManager tileManager, GamePanel gamePanel, int laneIndex, int startXposition, int speed) {

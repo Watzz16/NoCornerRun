@@ -9,9 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class GemManager {
+public class MagnifierManager {
 
-    private List<Gem> gemList = new ArrayList<>();
+    private List<Magnifier> magnifierList = new ArrayList<>();
     private double gemSecondCounter = 0;
     private int gemSpawnInterval = 10; //every 10 seconds spawn a gem with a chance of
     private double gemSpawnChance = 1; //10%
@@ -19,7 +19,7 @@ public class GemManager {
     private GamePanel gamePanel;
     private TileManager tileManager;
 
-    public GemManager(GamePanel gamePanel, TileManager tileManager) {
+    public MagnifierManager(GamePanel gamePanel, TileManager tileManager) {
         this.gamePanel = gamePanel;
         this.tileManager = tileManager;
     }
@@ -32,7 +32,7 @@ public class GemManager {
             if(rng <= gemSpawnChance) {
                 int randomLaneIndex = ThreadLocalRandom.current().nextInt(0, tileManager.getLanes().length);
                 int xSpawnPos = tileManager.getLanes()[randomLaneIndex].getXPosOfRightmostTile() + gamePanel.tileSize + 3;
-                gemList.add(new Gem(gamePanel, tileManager, randomLaneIndex, xSpawnPos, 0));
+                magnifierList.add(new Magnifier(gamePanel, tileManager, randomLaneIndex, xSpawnPos, 0));
             }
 
             gemSecondCounter = 0;
@@ -40,24 +40,24 @@ public class GemManager {
     }
 
     public void updateGems() {
-        for(Iterator<Gem> iterator = gemList.iterator(); iterator.hasNext();) {
-            Gem gem = iterator.next();
-            gem.update();
-            if((gem.getX() + gamePanel.tileSize) <= 0) {
+        for(Iterator<Magnifier> iterator = magnifierList.iterator(); iterator.hasNext();) {
+            Magnifier magnifier = iterator.next();
+            magnifier.update();
+            if((magnifier.getX() + gamePanel.tileSize) <= 0) {
                 iterator.remove();
             }
         }
     }
 
     public void drawGems(Graphics2D g2) {
-        for(Iterator<Gem> iterator = gemList.iterator(); iterator.hasNext();) {
-            Gem gem = iterator.next();
-            gem.draw(g2);
+        for(Iterator<Magnifier> iterator = magnifierList.iterator(); iterator.hasNext();) {
+            Magnifier magnifier = iterator.next();
+            magnifier.draw(g2);
         }
     }
 
-    public List<Gem> getGemList() {
-        return gemList;
+    public List<Magnifier> getGemList() {
+        return magnifierList;
     }
 
 }

@@ -5,14 +5,13 @@ import entity.HitboxType;
 import entity.Player;
 import entity.enemies.Enemy;
 import entity.enemies.EnemyManager;
-import entity.items.Gem;
+import entity.items.Magnifier;
 import entity.items.ItemCrate;
 import entity.items.ItemManager;
 import entity.particles.AbilityManager;
 import entity.particles.FireCharge;
 
 import java.util.Iterator;
-import java.util.List;
 
 public class CollisionChecker {
 
@@ -31,9 +30,9 @@ public class CollisionChecker {
     }
 
     public void checkPlayerCollisionWithItems(Player player, ItemManager itemManager) {
-        for(Iterator<Gem> iterator = itemManager.getGemManager().getGemList().iterator(); iterator.hasNext();) {
-            Gem gem = iterator.next();
-            if(checkCollisionBetweenEntities(player, gem)) {
+        for(Iterator<Magnifier> iterator = itemManager.getGemManager().getGemList().iterator(); iterator.hasNext();) {
+            Magnifier magnifier = iterator.next();
+            if(checkCollisionBetweenEntities(player, magnifier)) {
                 iterator.remove();
                 gamePanel.currentlyCollectedGems++;
             }

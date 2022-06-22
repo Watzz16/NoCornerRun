@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Gem extends Item {
+public class Magnifier extends Item {
 
     private int floatAnimFrameCounter = 0;
     private int floatAnimUpdateNeededFrames = 5;
@@ -19,7 +19,7 @@ public class Gem extends Item {
     private final int floatAnimDeviationFromZero = 3;
     private boolean floatAnimUp = true;
 
-    public Gem(GamePanel gamePanel, TileManager tileManager, int laneIndex, int startXposition, int speed) {
+    public Magnifier(GamePanel gamePanel, TileManager tileManager, int laneIndex, int startXposition, int speed) {
         super(gamePanel, tileManager, laneIndex, startXposition, speed);
         this.hitboxType = HitboxType.CIRCLE;
     }
@@ -27,7 +27,7 @@ public class Gem extends Item {
     @Override
     protected void loadSprite() {
         try {
-            this.sprite = ImageIO.read(getClass().getResourceAsStream("/sprites/Items/gemBlue.png"));
+            this.sprite = ImageIO.read(getClass().getResourceAsStream("/sprites/Items/magnifier.png"));
         } catch(IOException e) {
             e.printStackTrace();
         }

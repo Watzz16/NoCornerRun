@@ -13,6 +13,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class EnemyManager {
 
     private List<Enemy> enemyList = new ArrayList<>();
+    private int countSaws = 0;
+    private int countSquids = 0;
     private GamePanel gamePanel;
     private TileManager tileManager;
     private int concurrentEnemyCount = 3;
@@ -39,6 +41,11 @@ public class EnemyManager {
             enemy.update();
             if((enemy.getX() + gamePanel.tileSize) <= 0) {
                 iterator.remove();
+                if(enemy instanceof SquidEnemy) {
+                    countSquids--;
+                } else if(enemy instanceof SawEnemy) {
+                    countSaws--;
+                }
             }
         }
         generateRandomEnemies();
@@ -46,19 +53,21 @@ public class EnemyManager {
 
     private void generateRandomEnemies() {
         //generate saws
-        if(enemyList.size() < concurrentEnemyCount) {
+        if(countSaws < concurrentEnemyCount) {
             int randomLaneIndex = ThreadLocalRandom.current().nextInt(0, tileManager.getLanes().length);
             int randomSpeed = ThreadLocalRandom.current().nextInt(minSpeed, maxSpeed+1); //inclusive of max -> add 1
             int randomTileOffset = ThreadLocalRandom.current().nextInt(0, 5); //maximum of 5 tiles of random offset for x spawn coordinate
             enemyList.add(new SawEnemy(tileManager, gamePanel, randomLaneIndex, (gamePanel.maxScreenCol + randomTileOffset) * gamePanel.tileSize, randomSpeed));
+            countSaws++;
         }
 
         //generate squids
-        if(enemyList.size() == concurrentEnemyCount && enemyList.size() < concurrentEnemyCount+concurrentSquidCount) {
+        if(countSquids < concurrentSquidCount) {
             int randomLaneIndex = ThreadLocalRandom.current().nextInt(0, tileManager.getLanes().length);
             int randomSpeed = ThreadLocalRandom.current().nextInt(minSpeedSquid, (minSpeedSquid < maxSpeed ? maxSpeed+1 : minSpeedSquid+1)); //inclusive of max -> add 1
             int randomTileOffset = ThreadLocalRandom.current().nextInt(0, 5); //maximum of 5 tiles of random offset for x spawn coordinate
             enemyList.add(new SquidEnemy(tileManager, gamePanel, randomLaneIndex, (gamePanel.maxScreenCol + randomTileOffset) * gamePanel.tileSize, randomSpeed));
+            countSquids++;
         }
     }
 
