@@ -2,9 +2,7 @@ package tile;
 
 import main.GamePanel;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.IOException;
 
 
 public class TileManager {

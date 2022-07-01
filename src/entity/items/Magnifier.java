@@ -1,14 +1,10 @@
 package entity.items;
 
-import entity.Entity;
 import entity.HitboxType;
 import main.GamePanel;
-import tile.Tile;
 import tile.TileManager;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Magnifier extends Item {

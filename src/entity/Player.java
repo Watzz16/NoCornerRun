@@ -21,8 +21,8 @@ public class Player extends Entity {
 
     private int spriteAnimCounter = 0;
     private int walkAnimSprite = 1;
-    private int walkAnimFrameDuration = 7;
-    private int numberOfWalkSprites = 3;
+    private int walkAnimFrameDuration = 6;
+    private int numberOfWalkSprites = 4;
     private final int maxHealth = 1;
     private int health = 1;
     private int currentFireChargeCount = 1;
@@ -50,13 +50,13 @@ public class Player extends Entity {
 
     public void loadPlayerImages() {
         try {
-            imageIdle = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/VariableSizes/Yellow/alienYellow_stand.png"));
-            imageWalk1 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/melon/player1.png"));
-            imageWalk2 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/melon/player2.png"));
-            imageWalk3 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/melon/player3.png"));
-            //imageWalk4 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player4.png"));
-            imageJump = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/melon/player3.png"));
-            imageDead = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/cube/player_dead.png"));
+            imageIdle = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
+            imageWalk1 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
+            imageWalk2 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk2.png"));
+            imageWalk3 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk3.png"));
+            imageWalk4 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
+            imageJump = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
+            imageDead = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -103,7 +103,7 @@ public class Player extends Entity {
 
     private void updatePosition() {
         int currentLanePositionY = tileManager.getLanes()[lane].getLaneYPosition();
-        this.y = currentLanePositionY-gamePanel.tileSize;
+        this.y = currentLanePositionY-imageWalk1.getHeight()/10;
     }
 
     public void draw(Graphics2D g2) {
@@ -116,14 +116,14 @@ public class Player extends Entity {
                     case 1 -> currentImage = imageWalk1;
                     case 2 -> currentImage = imageWalk2;
                     case 3 -> currentImage = imageWalk3;
-                    //case 4 -> currentImage = imageWalk4;
+                    case 4 -> currentImage = imageWalk4;
                 }
             }
             case DEAD -> currentImage = imageDead;
         }
 
-        g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
-        //g2.drawImage(currentImage, x, y, currentImage.getWidth()/8, currentImage.getHeight()/8, null);
+        //g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(currentImage, x, y, currentImage.getWidth()/10, currentImage.getHeight()/10, null);
     }
 
     private void walkAnimation() {

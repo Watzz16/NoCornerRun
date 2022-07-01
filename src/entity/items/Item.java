@@ -5,10 +5,8 @@ import entity.HitboxType;
 import main.GamePanel;
 import tile.TileManager;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public abstract class Item extends Entity {
 
