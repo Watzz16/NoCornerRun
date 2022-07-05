@@ -108,6 +108,8 @@ public class EnemyManager {
     }
 
     public void resetEnemies() {
+        this.countSaws = 0;
+        this.countSquids = 0;
         this.enemyList.clear();
     }
 
