@@ -99,6 +99,7 @@ public class RequestService {
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
                 this.authToken = jsonResponse.get("token").toString();
+                this.loggedinPlayername = playername;
             } else {
                 System.err.println("HTTP Error: " + EntityUtils.toString(response.getEntity()));
             }

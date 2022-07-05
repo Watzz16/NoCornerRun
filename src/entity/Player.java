@@ -86,7 +86,7 @@ public class Player extends Entity {
 
     private void shootFireCharges() {
         if(currentFireChargeCount > 0 && keyHandler.rightKeyPressed) {
-            gamePanel.abilityManager.getFireCharges().add(new FireCharge(gamePanel, tileManager, this.x, this.y));
+            gamePanel.abilityManager.getFireCharges().add(new FireCharge(gamePanel, tileManager, this.x, this.y + 12));
             currentFireChargeCount--;
             keyHandler.rightKeyPressed = false;
         }

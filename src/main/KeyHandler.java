@@ -96,11 +96,15 @@ public class KeyHandler implements KeyListener {
                     handleLoginPress();
                 }
                 case 3 -> {
+                    //REGISTER
+                    handleRegisterPress();
+                }
+                case 4 -> {
                     //PLAY
                     gamePanel.gameState = GameState.RUNNING;
                     gamePanel.playMusic();
                 }
-                case 4 -> {
+                case 5 -> {
                     //QUIT
                     System.exit(0);
                 }
@@ -133,6 +137,18 @@ public class KeyHandler implements KeyListener {
 
         try {
             requestService.login(gamePanel.ui.menuUsername, gamePanel.ui.menuPassword);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleRegisterPress() {
+        if(gamePanel.ui.menuUsername.length() == 0 || gamePanel.ui.menuPassword.length() == 0) return;
+
+        System.out.println("REGISTER WITH USERNAME: " + gamePanel.ui.menuUsername + " and password: " + gamePanel.ui.menuPassword);
+
+        try {
+            requestService.register(gamePanel.ui.menuUsername, gamePanel.ui.menuPassword);
         } catch (IOException e) {
             e.printStackTrace();
         }

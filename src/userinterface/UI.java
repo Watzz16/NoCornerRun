@@ -14,10 +14,10 @@ public class UI {
     private GamePanel gamePanel;
     private RequestService requestService;
     private Font gameFont;
-    public int commandNum = 3;
+    public int commandNum = 4;
     public String menuUsername = "";
     public String menuPassword = "";
-    public final int maxCommands = 4;
+    public final int maxCommands = 5;
 
     public UI(GamePanel gamePanel, RequestService requestService) {
         this.gamePanel = gamePanel;
@@ -48,7 +48,7 @@ public class UI {
             case RUNNING -> {
                 drawScore(g2);
                 drawAvailableFireCharges(g2);
-                drawGems(g2);
+                drawKnowledge(g2);
             }
         }
     }
@@ -57,36 +57,36 @@ public class UI {
     private void drawScore(Graphics2D g2) {
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(20f));
-        String text = "Score: " + (int) gamePanel.score;
-        g2.drawString(text, (gamePanel.maxScreenCol-3)* gamePanel.tileSize, gamePanel.tileSize);
+        String text = "Score:" + (int) gamePanel.score;
+        g2.drawString(text, (gamePanel.maxScreenCol-4)* gamePanel.tileSize, gamePanel.tileSize);
     }
 
     private void drawAvailableFireCharges(Graphics2D g2) {
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(20f));
         String text = gamePanel.player.getCurrentFireChargeCount() + "x";
-        g2.drawString(text, (gamePanel.maxScreenCol-6)* gamePanel.tileSize, gamePanel.tileSize);
+        g2.drawString(text, (gamePanel.maxScreenCol-8)* gamePanel.tileSize, gamePanel.tileSize);
         BufferedImage fireChargeImage = null;
         try {
             fireChargeImage = ImageIO.read(getClass().getResourceAsStream("/sprites/Particles/fireball.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        g2.drawImage(fireChargeImage, (gamePanel.maxScreenCol-6)* gamePanel.tileSize + 10, 16, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(fireChargeImage, (gamePanel.maxScreenCol-8)* gamePanel.tileSize + 30, 12, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 
-    private void drawGems(Graphics2D g2) {
+    private void drawKnowledge(Graphics2D g2) {
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(20f));
         String text = gamePanel.currentlyCollectedGems + "x";
-        g2.drawString(text, (gamePanel.maxScreenCol-4)* gamePanel.tileSize - 24, gamePanel.tileSize);
+        g2.drawString(text, (gamePanel.maxScreenCol-6)* gamePanel.tileSize - 8, gamePanel.tileSize);
         BufferedImage gemImage = null;
         try {
-            gemImage = ImageIO.read(getClass().getResourceAsStream("/sprites/Items/gemBlue.png"));
+            gemImage = ImageIO.read(getClass().getResourceAsStream("/sprites/Items/magnifier.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        g2.drawImage(gemImage, (gamePanel.maxScreenCol-4)* gamePanel.tileSize - 10, 16, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(gemImage, (gamePanel.maxScreenCol-6)* gamePanel.tileSize + 30, 16, gamePanel.tileSize-12, gamePanel.tileSize-12, null);
     }
 
     private void drawGameOverScreen(Graphics2D g2) {
@@ -152,11 +152,19 @@ public class UI {
             g2.drawString(">", x-gamePanel.tileSize, y);
         }
 
+        text = "REGISTER";
+        x = getTextCenterX(g2, text);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 3);
+        g2.drawString(text, x, y);
+        if(commandNum == 3) {
+            g2.drawString(">", x-gamePanel.tileSize, y);
+        }
+
         text = "PLAY";
         x = getTextCenterX(g2, text);
         y = gamePanel.tileSize * (gamePanel.maxScreenRow - 2);
         g2.drawString(text, x, y);
-        if(commandNum == 3) {
+        if(commandNum == 4) {
             g2.drawString(">", x-gamePanel.tileSize, y);
         }
 
@@ -164,7 +172,7 @@ public class UI {
         x = getTextCenterX(g2, text);
         y = gamePanel.tileSize * (gamePanel.maxScreenRow - 1);
         g2.drawString(text, x, y);
-        if(commandNum == 4) {
+        if(commandNum == 5) {
             g2.drawString(">", x-gamePanel.tileSize, y);
         }
 
