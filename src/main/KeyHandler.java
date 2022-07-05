@@ -1,8 +1,12 @@
 package main;
 
+
+import services.RequestService;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.security.Key;
+import java.io.IOException;
+import java.util.Optional;
 
 public class KeyHandler implements KeyListener {
 
@@ -16,13 +20,16 @@ public class KeyHandler implements KeyListener {
     public boolean canPressRight = true;
 
     private GamePanel gamePanel;
+    private RequestService requestService;
 
-    public KeyHandler(GamePanel gamePanel) {
+    public KeyHandler(GamePanel gamePanel, RequestService requestService) {
         this.gamePanel = gamePanel;
+        this.requestService = requestService;
     }
 
     @Override
-    public void keyTyped(KeyEvent e) { }
+    public void keyTyped(KeyEvent e) {
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -30,10 +37,13 @@ public class KeyHandler implements KeyListener {
         if(gamePanel.gameState == GameState.RUNNING) keyHandleRunningState(code);
         if(gamePanel.gameState == GameState.GAMEOVER) keyHandleGameOverState(code);
         if(gamePanel.gameState == GameState.MAINMENU) keyHandleMenuState(code);
+        if(gamePanel.gameState == GameState.MAINMENU && (gamePanel.ui.commandNum == 0 || gamePanel.ui.commandNum == 1)) handleMenuKeyTyping(e);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if(gamePanel.gameState != GameState.RUNNING) return;
+
         int code = e.getKeyCode();
         if(code == KeyEvent.VK_UP) {
             canPressUpKey = true;
@@ -81,14 +91,9 @@ public class KeyHandler implements KeyListener {
 
         if(code == KeyEvent.VK_ENTER) {
             switch(gamePanel.ui.commandNum) {
-                case 0 -> {
-                    //username input
-                }
-                case 1 -> {
-                    //password input
-                }
                 case 2 -> {
                     //LOGIN
+                    handleLoginPress();
                 }
                 case 3 -> {
                     //PLAY
@@ -101,6 +106,43 @@ public class KeyHandler implements KeyListener {
                 }
             }
         }
+    }
+
+    private void handleMenuKeyTyping(KeyEvent e) {
+        if(!Character.isLetterOrDigit(e.getKeyCode()) && e.getKeyCode() != KeyEvent.VK_BACK_SPACE) return;
+
+        if(gamePanel.ui.commandNum == 0) {
+            if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                gamePanel.ui.menuUsername = removeLastCharOptional(gamePanel.ui.menuUsername);
+            } else {
+                gamePanel.ui.menuUsername += e.getKeyChar();
+            }
+        } else if(gamePanel.ui.commandNum == 1) {
+            if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                gamePanel.ui.menuPassword = removeLastCharOptional(gamePanel.ui.menuPassword);
+            } else {
+                gamePanel.ui.menuPassword += e.getKeyChar();
+            }
+        }
+    }
+
+    private void handleLoginPress() {
+        if(gamePanel.ui.menuUsername.length() == 0 || gamePanel.ui.menuPassword.length() == 0) return;
+
+        System.out.println("LOGIN WITH USERNAME: " + gamePanel.ui.menuUsername + " and password: " + gamePanel.ui.menuPassword);
+
+        try {
+            requestService.login(gamePanel.ui.menuUsername, gamePanel.ui.menuPassword);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String removeLastCharOptional(String s) {
+        return Optional.ofNullable(s)
+                .filter(str -> str.length() != 0)
+                .map(str -> str.substring(0, str.length() - 1))
+                .orElse(s);
     }
 
 }

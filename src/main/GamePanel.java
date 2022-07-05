@@ -4,6 +4,7 @@ import entity.Player;
 import entity.enemies.EnemyManager;
 import entity.items.ItemManager;
 import entity.particles.AbilityManager;
+import services.RequestService;
 import sound.Sound;
 import tile.LevelManager;
 import tile.TileManager;
@@ -29,7 +30,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     public final int FPS = 60;
 
-    KeyHandler keyHandler = new KeyHandler(this);
+    RequestService requestService = new RequestService();
+
+    KeyHandler keyHandler = new KeyHandler(this, requestService);
     Thread gameThread;
 
     Background background = new Background();
@@ -42,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     LevelManager levelManager = new LevelManager(this, tileManager, enemyManager, itemManager);
 
-    public UI ui = new UI(this);
+    public UI ui = new UI(this, requestService);
 
     public CollisionChecker collisionChecker = new CollisionChecker(this);
 

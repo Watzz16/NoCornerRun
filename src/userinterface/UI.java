@@ -2,21 +2,37 @@ package userinterface;
 
 import main.GamePanel;
 import main.GameState;
+import services.RequestService;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class UI {
-    GamePanel gamePanel;
-    Font gameFont;
-    public int commandNum = 0;
+    private GamePanel gamePanel;
+    private RequestService requestService;
+    private Font gameFont;
+    public int commandNum = 3;
+    public String menuUsername = "";
+    public String menuPassword = "";
     public final int maxCommands = 4;
 
-    public UI(GamePanel gamePanel) {
+    public UI(GamePanel gamePanel, RequestService requestService) {
         this.gamePanel = gamePanel;
-        gameFont = new Font("Arial", Font.PLAIN, 40);
+        this.requestService = requestService;
+
+        try {
+            InputStream is = getClass().getResourceAsStream("/fonts/PressStart2P-Regular.ttf");
+            gameFont = Font.createFont(Font.TRUETYPE_FONT, is);
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //gameFont = new Font("Arial", Font.PLAIN, 40);
     }
 
     public void draw(Graphics2D g2) {
@@ -36,6 +52,7 @@ public class UI {
             }
         }
     }
+
 
     private void drawScore(Graphics2D g2) {
         g2.setColor(Color.white);
@@ -76,7 +93,7 @@ public class UI {
         g2.setColor(new Color(0, 0, 0, 150));
         g2.fillRect(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
 
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 110f));
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 72f));
 
         //shadow
         g2.setColor(Color.BLACK);
@@ -88,12 +105,12 @@ public class UI {
         g2.drawString(text, getTextCenterX(g2, text)-4, gamePanel.tileSize*4-4);
 
         //final score
-        g2.setFont(g2.getFont().deriveFont(30f));
+        g2.setFont(g2.getFont().deriveFont(24f));
         text = "Your score: " + (int) gamePanel.score;
         g2.drawString(text, getTextCenterX(g2, text), gamePanel.tileSize*6);
 
         //retry option
-        g2.setFont(g2.getFont().deriveFont(50f));
+        g2.setFont(g2.getFont().deriveFont(24f));
         text = "Press Enter to retry";
         g2.drawString(text, getTextCenterX(g2, text), gamePanel.tileSize*10);
     }
@@ -103,7 +120,7 @@ public class UI {
         g2.fillRect(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
 
         //title name
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96f));
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48f));
         String text = "No Corner Run";
         int x = getTextCenterX(g2, text);
         int y = gamePanel.tileSize * 2;
@@ -117,38 +134,15 @@ public class UI {
         g2.drawString(text, x, y);
 
         //login components
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
-
-        text = "username";
-        Rectangle rect = new Rectangle(250,gamePanel.tileSize);
-        x = getRectCenterX(rect.width);
-        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 8);
-        g2.setColor(Color.blue);
-        g2.fillRect(x, y, rect.width, rect.height);
-        g2.setColor(Color.white);
-        g2.drawString(text, x, y-5);
-        if(commandNum == 0) {
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48f));
-            g2.drawString(">", x - gamePanel.tileSize, y+rect.height/2+12);
-        }
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
-
-        text = "password";
-        rect = new Rectangle(250,gamePanel.tileSize);
-        x = getRectCenterX(rect.width);
-        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 6);
-        g2.setColor(Color.blue);
-        g2.fillRect(x, y, rect.width, rect.height);
-        g2.setColor(Color.white);
-        g2.drawString(text, x, y-5);
-        if(commandNum == 1) {
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48f));
-            g2.drawString(">", x - gamePanel.tileSize, y+rect.height/2+12);
+        if(!requestService.isLoggedIn()) {
+            drawLoginRegisterComponents(g2);
+        } else {
+            drawLoggedInPlayerChar(g2);
         }
 
         //menu buttons
         g2.setColor(Color.white);
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48f));
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
 
         text = "LOGIN";
         x = getTextCenterX(g2, text);
@@ -174,6 +168,49 @@ public class UI {
             g2.drawString(">", x-gamePanel.tileSize, y);
         }
 
+    }
+
+    private void drawLoginRegisterComponents(Graphics2D g2) {
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+
+        String text = "username";
+        Rectangle rect = new Rectangle(250,gamePanel.tileSize);
+        int x = getRectCenterX(rect.width);
+        int y = gamePanel.tileSize * (gamePanel.maxScreenRow - 8);
+        g2.setColor(Color.blue);
+        g2.fillRect(x, y, rect.width, rect.height);
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y-5);
+        g2.drawString(menuUsername, x+5, y+rect.height/2+12);
+        if(commandNum == 0) {
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+            g2.drawString(">", x - gamePanel.tileSize, y+rect.height/2+12);
+        }
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+
+        text = "password";
+        rect = new Rectangle(250,gamePanel.tileSize);
+        x = getRectCenterX(rect.width);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 6);
+        g2.setColor(Color.blue);
+        g2.fillRect(x, y, rect.width, rect.height);
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y-5);
+        g2.drawString(menuPassword, x+5, y+rect.height/2+12);
+        if(commandNum == 1) {
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+            g2.drawString(">", x - gamePanel.tileSize, y+rect.height/2+12);
+        }
+    }
+
+    private void drawLoggedInPlayerChar(Graphics2D g2) {
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+
+        String text = "Logged in as " + requestService.getLoggedinPlayername();
+        int x = getTextCenterX(g2, text);
+        int y = gamePanel.tileSize * (gamePanel.maxScreenRow - 8);
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y);
     }
 
     private int getTextCenterX(Graphics2D g2, String text) {

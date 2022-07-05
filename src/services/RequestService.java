@@ -34,6 +34,7 @@ public class RequestService {
     private final String server = "http://localhost:8080";
     private String authToken;
     private Gson gson;
+    private String loggedinPlayername = "";
 
     public RequestService() {
         this.gson = new Gson();
@@ -77,6 +78,7 @@ public class RequestService {
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
                 this.authToken = jsonResponse.get("token").toString();
+                this.loggedinPlayername = playername;
             } else {
                 System.err.println("HTTP Error: " + EntityUtils.toString(response.getEntity()));
             }
@@ -136,6 +138,10 @@ public class RequestService {
             return null;
         }
 
+    }
+
+    public String getLoggedinPlayername() {
+        return loggedinPlayername;
     }
 
 }
