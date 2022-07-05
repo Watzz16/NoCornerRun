@@ -11,6 +11,8 @@ import java.io.IOException;
 public class UI {
     GamePanel gamePanel;
     Font gameFont;
+    public int commandNum = 0;
+    public final int maxCommands = 4;
 
     public UI(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -20,11 +22,18 @@ public class UI {
     public void draw(Graphics2D g2) {
         g2.setFont(gameFont);
 
-        if(gamePanel.gameState == GameState.GAMEOVER) drawGameOverScreen(g2);
-        if(gamePanel.gameState == GameState.RUNNING) {
-            drawScore(g2);
-            drawAvailableFireCharges(g2);
-            drawGems(g2);
+        switch(gamePanel.gameState) {
+            case MAINMENU -> {
+                drawMenuScreen(g2);
+            }
+            case GAMEOVER -> {
+                drawGameOverScreen(g2);
+            }
+            case RUNNING -> {
+                drawScore(g2);
+                drawAvailableFireCharges(g2);
+                drawGems(g2);
+            }
         }
     }
 
@@ -89,9 +98,92 @@ public class UI {
         g2.drawString(text, getTextCenterX(g2, text), gamePanel.tileSize*10);
     }
 
+    private void drawMenuScreen(Graphics2D g2) {
+        g2.setColor(new Color(0, 0, 0, 0));
+        g2.fillRect(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
+
+        //title name
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96f));
+        String text = "No Corner Run";
+        int x = getTextCenterX(g2, text);
+        int y = gamePanel.tileSize * 2;
+
+        //shadow
+        g2.setColor(Color.gray);
+        g2.drawString(text, x+5, y+5);
+
+        //actual title
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y);
+
+        //login components
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+
+        text = "username";
+        Rectangle rect = new Rectangle(250,gamePanel.tileSize);
+        x = getRectCenterX(rect.width);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 8);
+        g2.setColor(Color.blue);
+        g2.fillRect(x, y, rect.width, rect.height);
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y-5);
+        if(commandNum == 0) {
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48f));
+            g2.drawString(">", x - gamePanel.tileSize, y+rect.height/2+12);
+        }
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+
+        text = "password";
+        rect = new Rectangle(250,gamePanel.tileSize);
+        x = getRectCenterX(rect.width);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 6);
+        g2.setColor(Color.blue);
+        g2.fillRect(x, y, rect.width, rect.height);
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y-5);
+        if(commandNum == 1) {
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48f));
+            g2.drawString(">", x - gamePanel.tileSize, y+rect.height/2+12);
+        }
+
+        //menu buttons
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48f));
+
+        text = "LOGIN";
+        x = getTextCenterX(g2, text);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 4);
+        g2.drawString(text, x, y);
+        if(commandNum == 2) {
+            g2.drawString(">", x-gamePanel.tileSize, y);
+        }
+
+        text = "PLAY";
+        x = getTextCenterX(g2, text);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 2);
+        g2.drawString(text, x, y);
+        if(commandNum == 3) {
+            g2.drawString(">", x-gamePanel.tileSize, y);
+        }
+
+        text = "QUIT";
+        x = getTextCenterX(g2, text);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 1);
+        g2.drawString(text, x, y);
+        if(commandNum == 4) {
+            g2.drawString(">", x-gamePanel.tileSize, y);
+        }
+
+    }
+
     private int getTextCenterX(Graphics2D g2, String text) {
         int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         int x = gamePanel.screenWidth / 2 - length / 2;
+        return x;
+    }
+
+    private int getRectCenterX(int width) {
+        int x = gamePanel.screenWidth / 2 - width / 2;
         return x;
     }
 

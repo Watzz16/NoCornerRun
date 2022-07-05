@@ -1,5 +1,5 @@
 package main;
 
 public enum GameState {
-    RUNNING, GAMEOVER
+    RUNNING, GAMEOVER, MAINMENU
 }

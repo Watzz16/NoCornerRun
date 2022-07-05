@@ -46,7 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public CollisionChecker collisionChecker = new CollisionChecker(this);
 
-    public GameState gameState = GameState.RUNNING;
+    public GameState gameState = GameState.MAINMENU;
 
     Sound sound = new Sound();
 
@@ -58,8 +58,6 @@ public class GamePanel extends JPanel implements Runnable {
 
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
-
-        this.playMusic();
     }
 
     public void startGameThread() {
@@ -108,7 +106,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if(gameState == GameState.GAMEOVER) return;
+        if(gameState == GameState.GAMEOVER || gameState == GameState.MAINMENU) return;
 
         player.update();
         tileManager.update();
@@ -127,6 +125,13 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+
+        //title screen
+        if(gameState == GameState.MAINMENU) {
+            ui.draw(g2);
+            g2.dispose();
+            return;
+        }
 
         background.draw(g2);
         tileManager.draw(g2);

@@ -39,6 +39,10 @@ public class RequestService {
         this.gson = new Gson();
     }
 
+    public boolean isLoggedIn() {
+        return authToken != null;
+    }
+
     public void updatePlayerStats(int highscore, int knowledge) {
         HttpPut put = new HttpPut(server + "/api/player");
         put.setHeader("Authorization", this.authToken);
