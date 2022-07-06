@@ -172,6 +172,15 @@ public class KeyHandler implements KeyListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if(requestService.isLoggedIn()) {
+            try {
+                PlayerStats player = requestService.getPlayer();
+                gamePanel.currentlyCollectedGems = player.getKnowledge();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static String removeLastCharOptional(String s) {
