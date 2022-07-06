@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class RequestService {
 
-    private final String server = "http://localhost:8080";
+    private final String server = "http://193.196.54.32:3000";
     private String authToken;
     private Gson gson;
     private String loggedinPlayername = "";
