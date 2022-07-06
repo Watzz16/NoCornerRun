@@ -34,7 +34,7 @@ public class RequestService {
     private final String server = "http://193.196.54.32:3000";
     private String authToken;
     private Gson gson;
-    private String loggedinPlayername = "";
+    private PlayerStats loggedinPlayer = null;
 
     public RequestService() {
         this.gson = new Gson();
@@ -78,7 +78,6 @@ public class RequestService {
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
                 this.authToken = jsonResponse.get("token").toString();
-                this.loggedinPlayername = playername;
             } else {
                 System.err.println("HTTP Error: " + EntityUtils.toString(response.getEntity()));
             }
@@ -99,7 +98,6 @@ public class RequestService {
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
                 this.authToken = jsonResponse.get("token").toString();
-                this.loggedinPlayername = playername;
             } else {
                 System.err.println("HTTP Error: " + EntityUtils.toString(response.getEntity()));
             }
@@ -115,6 +113,7 @@ public class RequestService {
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 String jsonResponseString = EntityUtils.toString(response.getEntity());
                 PlayerStats player = gson.fromJson(jsonResponseString, PlayerStats.class);
+                this.loggedinPlayer = player;
                 return player;
             } else {
                 System.err.println("HTTP Error: " + EntityUtils.toString(response.getEntity()));
@@ -141,8 +140,8 @@ public class RequestService {
 
     }
 
-    public String getLoggedinPlayername() {
-        return loggedinPlayername;
+    public PlayerStats getLoggedinPlayer() {
+        return loggedinPlayer;
     }
 
 }

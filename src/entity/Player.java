@@ -4,6 +4,8 @@ import entity.particles.FireCharge;
 import main.GamePanel;
 import main.GameState;
 import main.KeyHandler;
+import services.PlayerStats;
+import services.RequestService;
 import tile.TileManager;
 
 import javax.imageio.ImageIO;
@@ -14,6 +16,7 @@ import java.io.IOException;
 public class Player extends Entity {
     GamePanel gamePanel;
     KeyHandler keyHandler;
+    RequestService requestService;
 
     BufferedImage imageIdle, imageWalk1, imageWalk2, imageWalk3, imageWalk4, imageJump, imageDead;
     PlayerState playerState = PlayerState.WALK;
@@ -30,10 +33,11 @@ public class Player extends Entity {
 
     int lane = 1;
 
-    public Player(GamePanel gamePanel, KeyHandler keyHandler, TileManager tileManager) {
+    public Player(GamePanel gamePanel, KeyHandler keyHandler, TileManager tileManager, RequestService requestService) {
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
         this.tileManager = tileManager;
+        this.requestService = requestService;
 
         this.setDefaultValues();
         this.hitboxType = HitboxType.CIRCLE;
@@ -146,6 +150,11 @@ public class Player extends Entity {
             playerState = PlayerState.DEAD;
             gamePanel.gameState = GameState.GAMEOVER;
             gamePanel.stopMusic();
+
+            if(requestService.isLoggedIn()) {
+                System.out.println("UPDATING PLAYER STATS");
+                requestService.updatePlayerStats((int) Math.max(gamePanel.score, requestService.getLoggedinPlayer().getHighscore()), gamePanel.currentlyCollectedGems);
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package main;
 
 
+import services.PlayerStats;
 import services.RequestService;
 
 import java.awt.event.KeyEvent;
@@ -72,6 +73,16 @@ public class KeyHandler implements KeyListener {
 
     private void keyHandleGameOverState(int code) {
         if(code == KeyEvent.VK_ENTER) {
+            if(requestService.isLoggedIn()) {
+                System.out.println("FETCHING PLAYER STATS");
+                try {
+                    PlayerStats player = requestService.getPlayer();
+                    gamePanel.currentlyCollectedGems = player.getKnowledge();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             gamePanel.gameState = GameState.RUNNING;
             gamePanel.player.resetPlayer();
             gamePanel.enemyManager.resetEnemies();
@@ -139,6 +150,15 @@ public class KeyHandler implements KeyListener {
             requestService.login(gamePanel.ui.menuUsername, gamePanel.ui.menuPassword);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if(requestService.isLoggedIn()) {
+            try {
+                PlayerStats player = requestService.getPlayer();
+                gamePanel.currentlyCollectedGems = player.getKnowledge();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

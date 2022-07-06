@@ -4,6 +4,7 @@ import entity.Player;
 import entity.enemies.EnemyManager;
 import entity.items.ItemManager;
 import entity.particles.AbilityManager;
+import services.PlayerStats;
 import services.RequestService;
 import sound.Sound;
 import tile.LevelManager;
@@ -37,7 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     Background background = new Background();
     TileManager tileManager = new TileManager(this);
-    public Player player = new Player(this, this.keyHandler, tileManager);
+    public Player player = new Player(this, this.keyHandler, tileManager, requestService);
 
     EnemyManager enemyManager = new EnemyManager(this, tileManager);
     ItemManager itemManager = new ItemManager(this, tileManager);
@@ -52,6 +53,8 @@ public class GamePanel extends JPanel implements Runnable {
     public GameState gameState = GameState.MAINMENU;
 
     Sound sound = new Sound();
+
+    public PlayerStats loggedInPlayer = null;
 
     //this is the constructor. It's a method that is called once a new object of that class is created. It constructs the object
     public GamePanel() {

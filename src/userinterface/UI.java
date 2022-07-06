@@ -79,7 +79,7 @@ public class UI {
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(20f));
         String text = gamePanel.currentlyCollectedGems + "x";
-        g2.drawString(text, (gamePanel.maxScreenCol-6)* gamePanel.tileSize - 8, gamePanel.tileSize);
+        g2.drawString(text, (gamePanel.maxScreenCol-6) * gamePanel.tileSize - 24, gamePanel.tileSize);
         BufferedImage gemImage = null;
         try {
             gemImage = ImageIO.read(getClass().getResourceAsStream("/sprites/Items/magnifier.png"));
@@ -214,9 +214,15 @@ public class UI {
     private void drawLoggedInPlayerChar(Graphics2D g2) {
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
 
-        String text = "Logged in as " + requestService.getLoggedinPlayername();
+        String text = "Logged in as " + requestService.getLoggedinPlayer().getPlayername();
         int x = getTextCenterX(g2, text);
         int y = gamePanel.tileSize * (gamePanel.maxScreenRow - 8);
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y);
+
+        text = "Highscore: " + requestService.getLoggedinPlayer().getHighscore();
+        x = getTextCenterX(g2, text);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 7);
         g2.setColor(Color.white);
         g2.drawString(text, x, y);
     }
