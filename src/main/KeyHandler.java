@@ -39,8 +39,9 @@ public class KeyHandler implements KeyListener {
         switch(gamePanel.gameState) {
             case RUNNING -> keyHandleRunningState(code);
             case GAMEOVER -> keyHandleGameOverState(code);
-            case MAINMENU -> {
-                keyHandleMenuState(code);
+            case MAINMENU -> keyHandleMenuState(code);
+            case LOGINREGISTER -> {
+                keyHandleLoginRegisterState(code);
                 if(gamePanel.ui.commandNum == 0 || gamePanel.ui.commandNum == 1) handleMenuKeyTyping(e);
             }
         }
@@ -105,6 +106,24 @@ public class KeyHandler implements KeyListener {
 
         if(code == KeyEvent.VK_ENTER) {
             switch(gamePanel.ui.commandNum) {
+                case 0 -> {
+                    //PLAY
+                    gamePanel.gameState = GameState.RUNNING;
+                    gamePanel.playMusic();
+                }
+                case 1 -> {
+                    //QUIT
+                    System.exit(0);
+                }
+            }
+        }
+    }
+
+    private void keyHandleLoginRegisterState(int code) {
+        handleMenuSelector(code);
+
+        if(code == KeyEvent.VK_ENTER) {
+            switch(gamePanel.ui.commandNum) {
                 case 2 -> {
                     //LOGIN
                     handleLoginPress();
@@ -112,15 +131,6 @@ public class KeyHandler implements KeyListener {
                 case 3 -> {
                     //REGISTER
                     handleRegisterPress();
-                }
-                case 4 -> {
-                    //PLAY
-                    gamePanel.gameState = GameState.RUNNING;
-                    gamePanel.playMusic();
-                }
-                case 5 -> {
-                    //QUIT
-                    System.exit(0);
                 }
             }
         }
@@ -137,7 +147,9 @@ public class KeyHandler implements KeyListener {
                 }
                 case 1 -> {
                     //BACK TO MENU
-                    gamePanel.ui.commandNum = 4;
+                    gamePanel.ui.minCommandNum = 0;
+                    gamePanel.ui.maxCommandNum = 1;
+                    gamePanel.ui.commandNum = 0;
                     resetGameComponents();
                     gamePanel.gameState = GameState.MAINMENU;
                 }
@@ -193,6 +205,10 @@ public class KeyHandler implements KeyListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            gamePanel.ui.minCommandNum = 0;
+            gamePanel.ui.maxCommandNum = 1;
+            gamePanel.ui.commandNum = 0;
+            gamePanel.gameState = GameState.MAINMENU;
         }
     }
 
@@ -214,6 +230,7 @@ public class KeyHandler implements KeyListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            gamePanel.gameState = GameState.MAINMENU;
         }
     }
 

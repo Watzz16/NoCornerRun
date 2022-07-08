@@ -16,9 +16,14 @@ public class UI {
     private Font gameFont;
     public String menuUsername = "";
     public String menuPassword = "";
-    public int commandNum = 4;
+    public int commandNum = 0;
     public int minCommandNum = 0;
-    public int maxCommandNum = 5;
+    public int maxCommandNum = 3;
+
+    //walk animation of player skin
+    private int spriteAnimCounter = 0;
+    private int walkAnimSprite = 1;
+    private int walkAnimFrameDuration = 6;
 
     public UI(GamePanel gamePanel, RequestService requestService) {
         this.gamePanel = gamePanel;
@@ -33,7 +38,7 @@ public class UI {
             e.printStackTrace();
         }
 
-        //gameFont = new Font("Arial", Font.PLAIN, 40);
+        //this.commandNum = gamePanel.gameState == GameState.LOGINREGISTER ? 0: 4;
     }
 
     public void draw(Graphics2D g2) {
@@ -51,9 +56,11 @@ public class UI {
                 drawAvailableFireCharges(g2);
                 drawKnowledge(g2);
             }
+            case LOGINREGISTER -> {
+                drawLoginRegisterScreen(g2);
+            }
         }
     }
-
 
     private void drawScore(Graphics2D g2) {
         g2.setColor(Color.white);
@@ -158,42 +165,17 @@ public class UI {
         g2.setColor(Color.white);
         g2.drawString(text, x, y);
 
-        //login components
-        if(!requestService.isLoggedIn()) {
-            this.minCommandNum = 0;
-            this.maxCommandNum = 5;
-            drawLoginRegisterComponents(g2);
-        } else {
-            this.minCommandNum = 2;
-            this.maxCommandNum = 5;
-            drawLoggedInPlayerChar(g2);
-        }
+        drawLoggedInPlayerChar(g2);
 
         //menu buttons
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
 
-        text = "LOGIN";
-        x = getTextCenterX(g2, text);
-        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 4);
-        g2.drawString(text, x, y);
-        if(commandNum == 2) {
-            g2.drawString(">", x-gamePanel.tileSize, y);
-        }
-
-        text = "REGISTER";
-        x = getTextCenterX(g2, text);
-        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 3);
-        g2.drawString(text, x, y);
-        if(commandNum == 3) {
-            g2.drawString(">", x-gamePanel.tileSize, y);
-        }
-
         text = "PLAY";
         x = getTextCenterX(g2, text);
         y = gamePanel.tileSize * (gamePanel.maxScreenRow - 2);
         g2.drawString(text, x, y);
-        if(commandNum == 4) {
+        if(commandNum == 0) {
             g2.drawString(">", x-gamePanel.tileSize, y);
         }
 
@@ -201,9 +183,52 @@ public class UI {
         x = getTextCenterX(g2, text);
         y = gamePanel.tileSize * (gamePanel.maxScreenRow - 1);
         g2.drawString(text, x, y);
-        if(commandNum == 5) {
+        if(commandNum == 1) {
             g2.drawString(">", x-gamePanel.tileSize, y);
         }
+
+    }
+
+    private void drawLoginRegisterScreen(Graphics2D g2) {
+        g2.setColor(new Color(0, 0, 0, 0));
+        g2.fillRect(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
+
+        //title name
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48f));
+        String text = "No Corner Run";
+        int x = getTextCenterX(g2, text);
+        int y = gamePanel.tileSize * 2;
+
+        //shadow
+        g2.setColor(Color.gray);
+        g2.drawString(text, x+5, y+5);
+
+        //actual title
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y);
+
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+
+        //login components
+        drawLoginRegisterComponents(g2);
+
+        text = "LOGIN";
+        x = getTextCenterX(g2, text);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 2);
+        g2.drawString(text, x, y);
+        if(commandNum == 2) {
+            g2.drawString(">", x-gamePanel.tileSize, y);
+        }
+
+        text = "REGISTER";
+        x = getTextCenterX(g2, text);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 1);
+        g2.drawString(text, x, y);
+        if(commandNum == 3) {
+            g2.drawString(">", x-gamePanel.tileSize, y);
+        }
+
 
     }
 
@@ -254,6 +279,38 @@ public class UI {
         y = gamePanel.tileSize * (gamePanel.maxScreenRow - 7);
         g2.setColor(Color.white);
         g2.drawString(text, x, y);
+
+        this.drawPlayerSkin(g2);
+
+    }
+
+    private void drawPlayerSkin(Graphics2D g2) {
+        BufferedImage currentImage = null;
+        switch (walkAnimSprite) {
+            case 1 -> currentImage = gamePanel.player.getWalkSprites()[0];
+            case 2 -> currentImage = gamePanel.player.getWalkSprites()[1];
+            case 3 -> currentImage = gamePanel.player.getWalkSprites()[2];
+            case 4 -> currentImage = gamePanel.player.getWalkSprites()[3];
+        }
+
+        int x = getRectCenterX(currentImage.getWidth()/5);
+        int y = gamePanel.tileSize * (gamePanel.maxScreenRow - 6) - 18;
+        g2.drawImage(currentImage, x, y, currentImage.getWidth()/5, currentImage.getHeight()/5, null);
+    }
+
+    public void updateMenuWalkAnimation() {
+
+        if(spriteAnimCounter > walkAnimFrameDuration) {
+            if(walkAnimSprite < gamePanel.player.getWalkSprites().length) {
+                walkAnimSprite++;
+            } else {
+                walkAnimSprite = 1;
+            }
+
+            spriteAnimCounter = 0;
+        }
+
+        spriteAnimCounter++;
     }
 
     private int getTextCenterX(Graphics2D g2, String text) {

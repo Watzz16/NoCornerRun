@@ -18,7 +18,7 @@ public class Player extends Entity {
     KeyHandler keyHandler;
     RequestService requestService;
 
-    BufferedImage imageIdle, imageWalk1, imageWalk2, imageWalk3, imageWalk4, imageJump, imageDead;
+    BufferedImage[] walkImages;
     PlayerState playerState = PlayerState.WALK;
     TileManager tileManager;
 
@@ -53,14 +53,12 @@ public class Player extends Entity {
     }
 
     public void loadPlayerImages() {
+        walkImages = new BufferedImage[numberOfWalkSprites];
         try {
-            imageIdle = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
-            imageWalk1 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
-            imageWalk2 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk2.png"));
-            imageWalk3 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk3.png"));
-            imageWalk4 = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
-            imageJump = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
-            imageDead = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
+            walkImages[0] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
+            walkImages[1] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk2.png"));
+            walkImages[2] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk3.png"));
+            walkImages[3] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -107,23 +105,21 @@ public class Player extends Entity {
 
     private void updatePosition() {
         int currentLanePositionY = tileManager.getLanes()[lane].getLaneYPosition();
-        this.y = currentLanePositionY-imageWalk1.getHeight()/10;
+        this.y = currentLanePositionY-walkImages[0].getHeight()/10;
     }
 
     public void draw(Graphics2D g2) {
         BufferedImage currentImage = null;
         switch(playerState) {
-            case IDLE -> currentImage = imageIdle;
-            case JUMP -> currentImage = imageJump;
+            case IDLE, DEAD, JUMP -> currentImage = walkImages[0];
             case WALK -> {
                 switch (walkAnimSprite) {
-                    case 1 -> currentImage = imageWalk1;
-                    case 2 -> currentImage = imageWalk2;
-                    case 3 -> currentImage = imageWalk3;
-                    case 4 -> currentImage = imageWalk4;
+                    case 1 -> currentImage = walkImages[0];
+                    case 2 -> currentImage = walkImages[1];
+                    case 3 -> currentImage = walkImages[2];
+                    case 4 -> currentImage = walkImages[3];
                 }
             }
-            case DEAD -> currentImage = imageDead;
         }
 
         //g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
@@ -185,5 +181,9 @@ public class Player extends Entity {
 
     public int getMaxFireChargeCount() {
         return maxFireChargeCount;
+    }
+
+    public BufferedImage[] getWalkSprites() {
+        return this.walkImages;
     }
 }

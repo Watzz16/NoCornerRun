@@ -50,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public CollisionChecker collisionChecker = new CollisionChecker(this);
 
-    public GameState gameState = GameState.MAINMENU;
+    public GameState gameState = requestService.isLoggedIn() ? GameState.MAINMENU : GameState.LOGINREGISTER;
 
     Sound sound = new Sound();
 
@@ -112,7 +112,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if(gameState == GameState.GAMEOVER || gameState == GameState.MAINMENU) return;
+        if(gameState == GameState.GAMEOVER || gameState == GameState.LOGINREGISTER) return;
+        if(gameState == GameState.MAINMENU) {
+            ui.updateMenuWalkAnimation();
+            return;
+        }
 
         player.update();
         tileManager.update();
@@ -133,7 +137,7 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         //title screen
-        if(gameState == GameState.MAINMENU) {
+        if(gameState == GameState.MAINMENU || gameState == GameState.LOGINREGISTER || gameState == GameState.GAMEOVER) {
             ui.draw(g2);
             g2.dispose();
             return;
