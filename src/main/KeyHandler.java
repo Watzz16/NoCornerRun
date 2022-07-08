@@ -35,10 +35,15 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        if(gamePanel.gameState == GameState.RUNNING) keyHandleRunningState(code);
-        if(gamePanel.gameState == GameState.GAMEOVER) keyHandleGameOverState(code);
-        if(gamePanel.gameState == GameState.MAINMENU) keyHandleMenuState(code);
-        if(gamePanel.gameState == GameState.MAINMENU && (gamePanel.ui.commandNum == 0 || gamePanel.ui.commandNum == 1)) handleMenuKeyTyping(e);
+
+        switch(gamePanel.gameState) {
+            case RUNNING -> keyHandleRunningState(code);
+            case GAMEOVER -> keyHandleGameOverState(code);
+            case MAINMENU -> {
+                keyHandleMenuState(code);
+                if(gamePanel.ui.commandNum == 0 || gamePanel.ui.commandNum == 1) handleMenuKeyTyping(e);
+            }
+        }
     }
 
     @Override
@@ -71,34 +76,32 @@ public class KeyHandler implements KeyListener {
         }
     }
 
-    private void keyHandleGameOverState(int code) {
-        if(code == KeyEvent.VK_ENTER) {
-            if(requestService.isLoggedIn()) {
-                System.out.println("FETCHING PLAYER STATS");
-                try {
-                    PlayerStats player = requestService.getPlayer();
-                    gamePanel.currentlyCollectedGems = player.getKnowledge();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    private void retryClick() {
+        if(requestService.isLoggedIn()) {
+            System.out.println("FETCHING PLAYER STATS");
+            try {
+                PlayerStats player = requestService.getPlayer();
+                gamePanel.currentlyCollectedGems = player.getKnowledge();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            gamePanel.gameState = GameState.RUNNING;
-            gamePanel.player.resetPlayer();
-            gamePanel.enemyManager.resetEnemies();
-            gamePanel.itemManager.resetItems();
-            gamePanel.levelManager.setLevel(1);
-            gamePanel.score = 0.0; //reset score
-            gamePanel.playMusic();
         }
+
+        gamePanel.gameState = GameState.RUNNING;
+        resetGameComponents();
+        gamePanel.playMusic();
+    }
+
+    private void resetGameComponents() {
+        gamePanel.player.resetPlayer();
+        gamePanel.enemyManager.resetEnemies();
+        gamePanel.itemManager.resetItems();
+        gamePanel.levelManager.setLevel(1);
+        gamePanel.score = 0.0; //reset score
     }
 
     private void keyHandleMenuState(int code) {
-        if(code == KeyEvent.VK_UP) {
-            if(gamePanel.ui.commandNum > 0) gamePanel.ui.commandNum--;
-        } else if(code == KeyEvent.VK_DOWN) {
-            if(gamePanel.ui.commandNum < gamePanel.ui.maxCommands) gamePanel.ui.commandNum++;
-        }
+        handleMenuSelector(code);
 
         if(code == KeyEvent.VK_ENTER) {
             switch(gamePanel.ui.commandNum) {
@@ -120,6 +123,37 @@ public class KeyHandler implements KeyListener {
                     System.exit(0);
                 }
             }
+        }
+    }
+
+    private void keyHandleGameOverState(int code) {
+        handleMenuSelector(code);
+
+        if(code == KeyEvent.VK_ENTER) {
+            switch(gamePanel.ui.commandNum) {
+                case 0 -> {
+                    //RETRY
+                    retryClick();
+                }
+                case 1 -> {
+                    //BACK TO MENU
+                    gamePanel.ui.commandNum = 4;
+                    resetGameComponents();
+                    gamePanel.gameState = GameState.MAINMENU;
+                }
+                case 2 -> {
+                    //QUIT
+                    System.exit(0);
+                }
+            }
+        }
+    }
+
+    private void handleMenuSelector(int code) {
+        if(code == KeyEvent.VK_UP) {
+            if(gamePanel.ui.commandNum > gamePanel.ui.minCommandNum) gamePanel.ui.commandNum--;
+        } else if(code == KeyEvent.VK_DOWN) {
+            if(gamePanel.ui.commandNum < gamePanel.ui.maxCommandNum) gamePanel.ui.commandNum++;
         }
     }
 

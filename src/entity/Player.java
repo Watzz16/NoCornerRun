@@ -148,6 +148,9 @@ public class Player extends Entity {
     private void checkPlayerHealth() {
         if(this.health <= 0) { //player died
             playerState = PlayerState.DEAD;
+            gamePanel.ui.commandNum = 0;
+            gamePanel.ui.minCommandNum = 0;
+            gamePanel.ui.maxCommandNum = 2;
             gamePanel.gameState = GameState.GAMEOVER;
             gamePanel.stopMusic();
 

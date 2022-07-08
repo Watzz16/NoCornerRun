@@ -14,10 +14,11 @@ public class UI {
     private GamePanel gamePanel;
     private RequestService requestService;
     private Font gameFont;
-    public int commandNum = 4;
     public String menuUsername = "";
     public String menuPassword = "";
-    public final int maxCommands = 5;
+    public int commandNum = 4;
+    public int minCommandNum = 0;
+    public int maxCommandNum = 5;
 
     public UI(GamePanel gamePanel, RequestService requestService) {
         this.gamePanel = gamePanel;
@@ -109,10 +110,34 @@ public class UI {
         text = "Your score: " + (int) gamePanel.score;
         g2.drawString(text, getTextCenterX(g2, text), gamePanel.tileSize*6);
 
-        //retry option
-        g2.setFont(g2.getFont().deriveFont(24f));
-        text = "Press Enter to retry";
-        g2.drawString(text, getTextCenterX(g2, text), gamePanel.tileSize*10);
+        //menu buttons
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+
+        text = "RETRY";
+        int x = getTextCenterX(g2, text);
+        int y = gamePanel.tileSize * (gamePanel.maxScreenRow - 3);
+        g2.drawString(text, x, y);
+        if(commandNum == 0) {
+            g2.drawString(">", x-gamePanel.tileSize, y);
+        }
+
+        text = "MENU";
+        x = getTextCenterX(g2, text);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 2);
+        g2.drawString(text, x, y);
+        if(commandNum == 1) {
+            g2.drawString(">", x-gamePanel.tileSize, y);
+        }
+
+        text = "QUIT";
+        x = getTextCenterX(g2, text);
+        y = gamePanel.tileSize * (gamePanel.maxScreenRow - 1);
+        g2.drawString(text, x, y);
+        if(commandNum == 2) {
+            g2.drawString(">", x-gamePanel.tileSize, y);
+        }
+
     }
 
     private void drawMenuScreen(Graphics2D g2) {
@@ -135,8 +160,12 @@ public class UI {
 
         //login components
         if(!requestService.isLoggedIn()) {
+            this.minCommandNum = 0;
+            this.maxCommandNum = 5;
             drawLoginRegisterComponents(g2);
         } else {
+            this.minCommandNum = 2;
+            this.maxCommandNum = 5;
             drawLoggedInPlayerChar(g2);
         }
 
