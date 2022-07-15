@@ -18,18 +18,17 @@ public class Player extends Entity {
     KeyHandler keyHandler;
     RequestService requestService;
 
-    BufferedImage[] walkImages;
     PlayerState playerState = PlayerState.WALK;
     TileManager tileManager;
 
     private int spriteAnimCounter = 0;
-    private int walkAnimSprite = 1;
-    private int walkAnimFrameDuration = 6;
-    private int numberOfWalkSprites = 4;
+    private int walkAnimSprite = 0;
     private final int maxHealth = 1;
     private int health = 1;
     private int currentFireChargeCount = 1;
     private final int maxFireChargeCount = 3;
+
+    private PlayerSkin skin = PlayerSkin.RED;
 
     int lane = 1;
 
@@ -42,7 +41,6 @@ public class Player extends Entity {
         this.setDefaultValues();
         this.hitboxType = HitboxType.CIRCLE;
         this.hitboxReduceOffset = gamePanel.tileSize / 4; //reduce hitbox by 12 pixel
-        loadPlayerImages();
     }
 
     public void setDefaultValues() {
@@ -50,18 +48,6 @@ public class Player extends Entity {
         this.y = 300;
         this.speed = 4;
         this.lane = 0;
-    }
-
-    public void loadPlayerImages() {
-        walkImages = new BufferedImage[numberOfWalkSprites];
-        try {
-            walkImages[0] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/skins/red/1.png"));
-            walkImages[1] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/skins/red/2.png"));
-            walkImages[2] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/skins/red/3.png"));
-            walkImages[3] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/skins/red/1.png"));
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void update() {
@@ -105,20 +91,15 @@ public class Player extends Entity {
 
     private void updatePosition() {
         int currentLanePositionY = tileManager.getLanes()[lane].getLaneYPosition();
-        this.y = currentLanePositionY-(walkImages[0].getHeight()/2 - 12);
+        this.y = currentLanePositionY-(skin.getWalkSprites()[0].getHeight()/2 - 12);
     }
 
     public void draw(Graphics2D g2) {
         BufferedImage currentImage = null;
         switch(playerState) {
-            case IDLE, DEAD, JUMP -> currentImage = walkImages[0];
+            case IDLE, DEAD, JUMP -> currentImage = skin.getWalkSprites()[0];
             case WALK -> {
-                switch (walkAnimSprite) {
-                    case 1 -> currentImage = walkImages[0];
-                    case 2 -> currentImage = walkImages[1];
-                    case 3 -> currentImage = walkImages[2];
-                    case 4 -> currentImage = walkImages[3];
-                }
+                currentImage = skin.getWalkSprites()[walkAnimSprite];
             }
         }
 
@@ -128,11 +109,11 @@ public class Player extends Entity {
 
     private void walkAnimation() {
 
-        if(spriteAnimCounter > walkAnimFrameDuration) {
-            if(walkAnimSprite < numberOfWalkSprites) {
+        if(spriteAnimCounter > skin.walkAnimFrameDuration) {
+            if(walkAnimSprite < skin.numberOfWalkSprites-1) {
                 walkAnimSprite++;
             } else {
-                walkAnimSprite = 1;
+                walkAnimSprite = 0;
             }
 
             spriteAnimCounter = 0;
@@ -183,7 +164,12 @@ public class Player extends Entity {
         return maxFireChargeCount;
     }
 
-    public BufferedImage[] getWalkSprites() {
-        return this.walkImages;
+    public PlayerSkin getSkin() {
+        return skin;
     }
+
+    public void setSkin(PlayerSkin skin) {
+        this.skin = skin;
+    }
+
 }

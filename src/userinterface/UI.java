@@ -1,5 +1,6 @@
 package userinterface;
 
+import entity.PlayerSkin;
 import main.GamePanel;
 import main.GameState;
 import services.RequestService;
@@ -22,8 +23,10 @@ public class UI {
 
     //walk animation of player skin
     private int spriteAnimCounter = 0;
-    private int walkAnimSprite = 1;
-    private int walkAnimFrameDuration = 6;
+    private int walkAnimSprite = 0;
+
+    public PlayerSkin selectedSkin = PlayerSkin.RED;
+    public int skinSelectorIndex = 0;
 
     public UI(GamePanel gamePanel, RequestService requestService) {
         this.gamePanel = gamePanel;
@@ -280,30 +283,30 @@ public class UI {
         g2.setColor(Color.white);
         g2.drawString(text, x, y);
 
-        this.drawPlayerSkin(g2);
+        this.drawSkinSelector(g2);
     }
 
-    private void drawPlayerSkin(Graphics2D g2) {
-        BufferedImage currentImage = null;
-        switch (walkAnimSprite) {
-            case 1 -> currentImage = gamePanel.player.getWalkSprites()[0];
-            case 2 -> currentImage = gamePanel.player.getWalkSprites()[1];
-            case 3 -> currentImage = gamePanel.player.getWalkSprites()[2];
-            case 4 -> currentImage = gamePanel.player.getWalkSprites()[3];
-        }
+    private void drawSkinSelector(Graphics2D g2) {
+        BufferedImage currentImage = this.selectedSkin.getWalkSprites()[walkAnimSprite];;
 
+        //draw selected skin
         int x = getRectCenterX(currentImage.getWidth());
         int y = gamePanel.tileSize * (gamePanel.maxScreenRow - 6) - 28;
         g2.drawImage(currentImage, x, y, currentImage.getWidth() - 12, currentImage.getHeight() - 12, null);
+
+        //draw skin selector left right arrows
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48f));
+        g2.drawString(">", (gamePanel.maxScreenCol-1) * gamePanel.tileSize - 44, y + 96);
+        g2.drawString("<", gamePanel.tileSize, y + 96);
     }
 
     public void updateMenuWalkAnimation() {
 
-        if(spriteAnimCounter > walkAnimFrameDuration) {
-            if(walkAnimSprite < gamePanel.player.getWalkSprites().length) {
+        if(spriteAnimCounter > selectedSkin.getWalkAnimFrameDuration()) {
+            if(walkAnimSprite < selectedSkin.getNumberOfWalkSprites()-1) {
                 walkAnimSprite++;
             } else {
-                walkAnimSprite = 1;
+                walkAnimSprite = 0;
             }
 
             spriteAnimCounter = 0;

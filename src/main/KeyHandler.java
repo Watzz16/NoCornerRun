@@ -1,6 +1,7 @@
 package main;
 
 
+import entity.PlayerSkin;
 import services.PlayerStats;
 import services.RequestService;
 
@@ -103,11 +104,13 @@ public class KeyHandler implements KeyListener {
 
     private void keyHandleMenuState(int code) {
         handleMenuSelector(code);
+        handSkinSelector(code);
 
         if(code == KeyEvent.VK_ENTER) {
             switch(gamePanel.ui.commandNum) {
                 case 0 -> {
                     //PLAY
+                    gamePanel.player.setSkin(gamePanel.ui.selectedSkin);
                     gamePanel.gameState = GameState.RUNNING;
                     gamePanel.playMusic();
                 }
@@ -167,6 +170,27 @@ public class KeyHandler implements KeyListener {
         } else if(code == KeyEvent.VK_DOWN) {
             if(gamePanel.ui.commandNum < gamePanel.ui.maxCommandNum) gamePanel.ui.commandNum++;
         }
+    }
+
+    private void handSkinSelector(int code) {
+        if(code == KeyEvent.VK_LEFT) {
+            if(gamePanel.ui.skinSelectorIndex > 0) {
+                gamePanel.ui.skinSelectorIndex--;
+            } else {
+                gamePanel.ui.skinSelectorIndex = PlayerSkin.getSkinWheel().length-1;
+            }
+        } else if(code == KeyEvent.VK_RIGHT) {
+            if(gamePanel.ui.skinSelectorIndex < PlayerSkin.getSkinWheel().length-1) {
+                gamePanel.ui.skinSelectorIndex++;
+            } else {
+                gamePanel.ui.skinSelectorIndex = 0;
+            }
+        } else {
+            return;
+        }
+
+        //update selected skin in UI here, so we dont need to set this every few milliseconds
+        gamePanel.ui.selectedSkin = PlayerSkin.getSkinWheel()[gamePanel.ui.skinSelectorIndex];
     }
 
     private void handleMenuKeyTyping(KeyEvent e) {
