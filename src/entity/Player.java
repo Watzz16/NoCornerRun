@@ -55,10 +55,10 @@ public class Player extends Entity {
     public void loadPlayerImages() {
         walkImages = new BufferedImage[numberOfWalkSprites];
         try {
-            walkImages[0] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
-            walkImages[1] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk2.png"));
-            walkImages[2] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk3.png"));
-            walkImages[3] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/Own/RedMan/walk1.png"));
+            walkImages[0] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/skins/red/1.png"));
+            walkImages[1] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/skins/red/2.png"));
+            walkImages[2] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/skins/red/3.png"));
+            walkImages[3] = ImageIO.read(getClass().getResourceAsStream("/sprites/Players/skins/red/1.png"));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -105,7 +105,7 @@ public class Player extends Entity {
 
     private void updatePosition() {
         int currentLanePositionY = tileManager.getLanes()[lane].getLaneYPosition();
-        this.y = currentLanePositionY-walkImages[0].getHeight()/10;
+        this.y = currentLanePositionY-(walkImages[0].getHeight()/2 - 12);
     }
 
     public void draw(Graphics2D g2) {
@@ -123,7 +123,7 @@ public class Player extends Entity {
         }
 
         //g2.drawImage(currentImage, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
-        g2.drawImage(currentImage, x, y, currentImage.getWidth()/10, currentImage.getHeight()/10, null);
+        g2.drawImage(currentImage, x, y, currentImage.getWidth()/2 - 12, currentImage.getHeight()/2 - 12, null);
     }
 
     private void walkAnimation() {

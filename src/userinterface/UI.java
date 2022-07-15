@@ -281,7 +281,6 @@ public class UI {
         g2.drawString(text, x, y);
 
         this.drawPlayerSkin(g2);
-
     }
 
     private void drawPlayerSkin(Graphics2D g2) {
@@ -293,9 +292,9 @@ public class UI {
             case 4 -> currentImage = gamePanel.player.getWalkSprites()[3];
         }
 
-        int x = getRectCenterX(currentImage.getWidth()/5);
-        int y = gamePanel.tileSize * (gamePanel.maxScreenRow - 6) - 18;
-        g2.drawImage(currentImage, x, y, currentImage.getWidth()/5, currentImage.getHeight()/5, null);
+        int x = getRectCenterX(currentImage.getWidth());
+        int y = gamePanel.tileSize * (gamePanel.maxScreenRow - 6) - 28;
+        g2.drawImage(currentImage, x, y, currentImage.getWidth() - 12, currentImage.getHeight() - 12, null);
     }
 
     public void updateMenuWalkAnimation() {
