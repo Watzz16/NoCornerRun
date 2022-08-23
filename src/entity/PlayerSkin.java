@@ -6,11 +6,15 @@ import java.io.IOException;
 
 public abstract class PlayerSkin {
 
+    protected int id;
     protected BufferedImage[] walkSprites;
     protected int numberOfWalkSprites = 4;
     protected int walkAnimFrameDuration = 6;
 
-    public PlayerSkin(int numberOfWalkSprites, int walkAnimFrameDuration) {
+    protected int cost;
+
+    public PlayerSkin(int id, int numberOfWalkSprites, int walkAnimFrameDuration) {
+        this.id = id;
         this.numberOfWalkSprites = numberOfWalkSprites;
         this.walkAnimFrameDuration = walkAnimFrameDuration;
         this.loadSprites();
@@ -22,7 +26,7 @@ public abstract class PlayerSkin {
         return this.walkSprites;
     }
 
-    public static final PlayerSkin RED = new PlayerSkin(4, 6) {
+    public static final PlayerSkin RED = new PlayerSkin(0,4, 6) {
         @Override
         protected void loadSprites() {
             walkSprites = new BufferedImage[numberOfWalkSprites];
@@ -37,7 +41,7 @@ public abstract class PlayerSkin {
         }
     };
 
-    public static final PlayerSkin BLUE = new PlayerSkin(4, 6) {
+    public static final PlayerSkin BLUE = new PlayerSkin(1, 4, 6) {
         @Override
         protected void loadSprites() {
             walkSprites = new BufferedImage[numberOfWalkSprites];
@@ -52,7 +56,7 @@ public abstract class PlayerSkin {
         }
     };
 
-    public static final PlayerSkin GREEN = new PlayerSkin(4, 6) {
+    public static final PlayerSkin GREEN = new PlayerSkin(2, 4, 6) {
         @Override
         protected void loadSprites() {
             walkSprites = new BufferedImage[numberOfWalkSprites];
@@ -67,7 +71,7 @@ public abstract class PlayerSkin {
         }
     };
 
-    public static final PlayerSkin SILVER = new PlayerSkin(4, 6) {
+    public static final PlayerSkin SILVER = new PlayerSkin(3, 4, 6) {
         @Override
         protected void loadSprites() {
             walkSprites = new BufferedImage[numberOfWalkSprites];
@@ -93,4 +97,6 @@ public abstract class PlayerSkin {
     public int getWalkAnimFrameDuration() {
         return walkAnimFrameDuration;
     }
+
+    public int getId() { return id; }
 }
