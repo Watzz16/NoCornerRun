@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class RequestService {
 
-    private final String server = "http://193.196.55.112:3000";
+    private final String server = "http://193.196.55.93:3000";
     private String authToken;
     private Gson gson;
     private PlayerStats loggedinPlayer = null;
